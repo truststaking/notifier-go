@@ -2,13 +2,11 @@ package redis
 
 import (
 	"context"
+	"crypto/tls"
 
-	logger "github.com/ElrondNetwork/elrond-go-logger"
 	"github.com/ElrondNetwork/notifier-go/config"
 	"github.com/go-redis/redis/v8"
 )
-
-var log = logger.GetOrCreate("redis")
 
 // CreateSimpleClient will create a redis client for a redis setup with one instance
 func CreateSimpleClient(cfg config.RedisConfig) (RedLockClient, error) {
@@ -16,6 +14,7 @@ func CreateSimpleClient(cfg config.RedisConfig) (RedLockClient, error) {
 	if err != nil {
 		return nil, err
 	}
+	opt.TLSConfig = &tls.Config{MinVersion: tls.VersionTLS12}
 	client := redis.NewClient(opt)
 
 	rc := NewRedisClientWrapper(client)
