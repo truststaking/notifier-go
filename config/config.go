@@ -81,7 +81,7 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	log.Info("Client created")
 	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("failed to get the secret: %v", err)
 		return nil, err
 	}
 
