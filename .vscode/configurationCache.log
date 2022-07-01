@@ -1,0 +1,1 @@
+{"buildTargets":[".PHONY","build","compose-new","compose-rm","compose-start","compose-stop","debug","debug-ath","docker-build","docker-logs","docker-new","docker-rm","docker-start","docker-stop","help","kill","request-test","run","runb","test"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

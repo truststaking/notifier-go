@@ -1,6 +1,4 @@
-FROM golang:1.17.6 as builder
-
-MAINTAINER ElrondNetwork
+FROM golang:1.18 as builder
 
 WORKDIR /elrond
 COPY . .

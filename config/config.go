@@ -1,6 +1,13 @@
 package config
 
-import "github.com/ElrondNetwork/elrond-go-core/core"
+import (
+	"context"
+	"fmt"
+
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azsecrets"
+	"github.com/ElrondNetwork/elrond-go-core/core"
+)
 
 // GeneralConfig defines the config setup based on main config file
 type GeneralConfig struct {
@@ -49,10 +56,47 @@ type FlagsConfig struct {
 
 // LoadConfig return a GeneralConfig instance by reading the provided toml file
 func LoadConfig(filePath string) (*GeneralConfig, error) {
+
 	cfg := &GeneralConfig{}
 	err := core.LoadTomlFile(cfg, filePath)
 	if err != nil {
 		return nil, err
 	}
+	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", "trustmarketvault")
+
+	cred, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := azsecrets.NewClient(keyVaultUrl, cred, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	nodesPassword, err := client.GetSecret(context.TODO(), "SquadNotifierPassword", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	redisURL, err := client.GetSecret(context.TODO(), "NotifierRedisURL", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg.ConnectorApi.Username = *nodesUsername.Value
+	cfg.ConnectorApi.Password = *nodesPassword.Value
+	cfg.Redis.Url = *redisURL.Value
+	cfg.RabbitMQ.Url = *rabbitURL.Value
 	return cfg, err
 }

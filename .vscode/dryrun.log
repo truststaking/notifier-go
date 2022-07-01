@@ -1,0 +1,7 @@
+make: Entering directory `/Users/truststaking/Documents/GitHub/mihai/notifier-go'
+echo -e ""
+echo -e "Make commands:"
+grep -E '^[a-zA-Z_-]+:.*$'  Makefile | awk 'BEGIN {FS = ":"}; {printf "\t\033[36m%-30s\033[0m\n", $1}'
+echo -e ""
+make: Leaving directory `/Users/truststaking/Documents/GitHub/mihai/notifier-go'
+ 
