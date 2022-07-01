@@ -11,7 +11,7 @@ RUN go build -o notifier
 FROM ubuntu:20.04
 COPY --from=builder /elrond/cmd/notifier /elrond
 
-EXPOSE 8080
+EXPOSE 5000
 
 WORKDIR /elrond
 
