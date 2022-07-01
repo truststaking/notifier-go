@@ -81,10 +81,11 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	log.Info("Client created")
 	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
 	if err != nil {
+		log.Error(err.Error())
 		return nil, err
 	}
 
-	log.Info(*rabbitURL.Value)
+	log.Info("After url")
 	nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", nil)
 	if err != nil {
 		return nil, err
