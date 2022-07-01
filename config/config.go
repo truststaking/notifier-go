@@ -1,11 +1,8 @@
 package config
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azsecrets"
 	"github.com/ElrondNetwork/elrond-go-core/core"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
 )
@@ -68,42 +65,42 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", "TrustMarketVault")
 
 	log.Info(keyVaultUrl)
-	cred, err := azidentity.NewDefaultAzureCredential(nil)
-	if err != nil {
-		return nil, err
-	}
+	// cred, err := azidentity.NewDefaultAzureCredential(nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
 	log.Info("After cred")
-	client, err := azsecrets.NewClient(keyVaultUrl, cred, nil)
-	if err != nil {
-		return nil, err
-	}
+	// client, err := azsecrets.NewClient(keyVaultUrl, cred, nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	log.Info("Client created")
-	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
-	if err != nil {
-		log.Error("failed to get the secret: %v", err)
-		return nil, err
-	}
+	// rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
+	// if err != nil {
+	// 	log.Error("failed to get the secret: %v", err)
+	// 	return nil, err
+	// }
 
-	log.Info("After url")
-	nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", nil)
-	if err != nil {
-		return nil, err
-	}
+	// log.Info("After url")
+	// nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	nodesPassword, err := client.GetSecret(context.TODO(), "SquadNotifierPassword", nil)
-	if err != nil {
-		return nil, err
-	}
+	// nodesPassword, err := client.GetSecret(context.TODO(), "SquadNotifierPassword", nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	redisURL, err := client.GetSecret(context.TODO(), "NotifierRedisURL", nil)
-	if err != nil {
-		return nil, err
-	}
+	// redisURL, err := client.GetSecret(context.TODO(), "NotifierRedisURL", nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	cfg.ConnectorApi.Username = *nodesUsername.Value
-	cfg.ConnectorApi.Password = *nodesPassword.Value
-	cfg.Redis.Url = *redisURL.Value
-	cfg.RabbitMQ.Url = *rabbitURL.Value
+	cfg.ConnectorApi.Username = "xoxnouser"
+	cfg.ConnectorApi.Password = "bG5atWZqkiEAxWS"
+	cfg.Redis.Url = "redis://:sD2VfqU37NdUl7AoA4H9juXt9sFw6YhDNAzCaJr3vbA=@trustmarket.redis.cache.windows.net:6380"
+	cfg.RabbitMQ.Url = "amqp://user:IExbuMmsviBP2@trustrabbitmqkdemcstsrkh42-vm0.westeurope.cloudapp.azure.com:5672"
 	return cfg, err
 }
