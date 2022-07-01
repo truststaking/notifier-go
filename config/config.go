@@ -65,7 +65,7 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", "trustmarketvault")
+	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", "TrustMarketVault")
 
 	log.Info(keyVaultUrl)
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
