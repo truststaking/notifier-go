@@ -12,9 +12,6 @@ FROM ubuntu:20.04
 COPY --from=builder /elrond/cmd/notifier /elrond
 
 EXPOSE 5000
-EXPOSE 6380 
-EXPOSE 5672
-EXPOSE 15672
 
 WORKDIR /elrond
 
