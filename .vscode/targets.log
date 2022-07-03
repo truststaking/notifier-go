@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Jul  1 18:50:06 2022
+# Make data base, printed on Sun Jul  3 16:06:07 2022
 
 # Variables
 
@@ -41,6 +41,8 @@ _ = /usr/bin/make
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
@@ -49,13 +51,17 @@ INFOPATH = /opt/homebrew/share/info:
 # makefile (from `Makefile', line 60)
 dockerfile = Dockerfile
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/vscode-ipc-ab4698b3-e72f-41bf-a551-032109eb597f.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/vscode-ipc-e2f5c5ab-1949-43aa-951c-0e12f3cfecd6.sock
 # environment
 VSCODE_CWD = /
+# environment
+GOPROXY = https://proxy.golang.org,direct
 # environment
 PATH = /Users/truststaking/elrondsdk:/Users/truststaking/.nvm/versions/node/v17.3.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin
 # makefile (from `Makefile', line 36)
 api_type = "rabbit-api"
+# environment
+GOPATH = /Users/truststaking/go
 # environment
 NVM_BIN = /Users/truststaking/.nvm/versions/node/v17.3.0/bin
 # environment
@@ -65,7 +71,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.TUDbcUP6VE/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.jMoo2X3HIF/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -79,7 +85,7 @@ ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
 MANPATH = /Users/truststaking/.nvm/versions/node/v17.3.0/share/man:/opt/homebrew/share/man::
 # environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+GOMODCACHE = /Users/truststaking/go/pkg/mod
 # environment
 HOME = /Users/truststaking
 # default
@@ -171,11 +177,11 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 26631
+VSCODE_PID = 9260
 # makefile (from `Makefile', line 58)
 container_name = notifier
 # variable set hash-table stats:
-# Load=80/1024=8%, Rehash=0, Collisions=1/108=1%
+# Load=83/1024=8%, Rehash=0, Collisions=2/111=2%
 
 # Pattern-specific Variable Values
 
@@ -183,9 +189,9 @@ container_name = notifier
 
 # Directories
 
-# . (device 16777230, inode 40832603): 28 files, no impossibilities.
+# . (device 16777233, inode 40832603): 31 files, no impossibilities.
 
-# 28 files, no impossibilities in 1 directories.
+# 31 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -311,12 +317,12 @@ help:
 
 request-test:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 119):
 	curl \
 	-X POST \
- 
 	-H "Content-Type: application/json" \
 	-u aaaa:aaa \
 	-d @${test_data_file} \
@@ -425,6 +431,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Jul  1 18:50:06 2022
+# Finished Make data base on Sun Jul  3 16:06:07 2022
 
  
