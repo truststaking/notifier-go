@@ -35,7 +35,7 @@ jobs:
         with:
           push: true
           tags: xoxno.azurecr.io/xoxnonotifier:${{ github.sha }}
-          file: ./docker-compose.yml
+          file: ./Dockerfile
           context: ./
 
   deploy:
