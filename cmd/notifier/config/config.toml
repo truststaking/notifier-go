@@ -15,7 +15,7 @@
 [Redis]
     # The url used to connect to a pubsub server
     # Note: not required for running in the notifier mode
-    Url = "redis://redis.internal.livelysmoke-45e2a824.westeurope.azurecontainerapps.io:6379/0"
+    Url = "redis://redis.livelysmoke-45e2a824.westeurope.azurecontainerapps.io:6379/0"
 
     # The pubsub channel used for publishing/subscribing
     # Note: not required for running in the notifier mode
