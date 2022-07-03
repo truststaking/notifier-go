@@ -4,14 +4,13 @@ name: Trigger auto deployment for xoxnonotifier
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ main ]
+    branches: [main]
     paths:
-    - '**'
-    - '.github/workflows/xoxnonotifier-AutoDeployTrigger-17f90d4f-e1c9-4fa6-9aa9-055ecc958107.yml'
+      - "**"
+      - ".github/workflows/xoxnonotifier-AutoDeployTrigger-17f90d4f-e1c9-4fa6-9aa9-055ecc958107.yml"
 
-  # Allow mannually trigger 
-  workflow_dispatch:      
+  # Allow mannually trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -39,17 +38,15 @@ jobs:
           file: ./docker-compose.yml
           context: ./
 
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    
+
     steps:
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.XOXNONOTIFIER_AZURE_CREDENTIALS }}
-
 
       - name: Deploy to containerapp
         uses: azure/CLI@v1

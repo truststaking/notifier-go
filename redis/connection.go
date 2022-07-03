@@ -13,9 +13,7 @@ func CreateSimpleClient(cfg config.RedisConfig) (RedLockClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	// opt.TLSConfig = &tls.Config{MinVersion: tls.VersionTLS12}
-	// opt.Addr = "trustmarket.redis.cache.windows.net:6380"
-	// opt.Password = "sD2VfqU37NdUl7AoA4H9juXt9sFw6YhDNAzCaJr3vbA="
+
 	client := redis.NewClient(opt)
 
 	rc := NewRedisClientWrapper(client)

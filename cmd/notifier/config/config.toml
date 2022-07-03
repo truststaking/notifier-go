@@ -3,10 +3,10 @@
     Port = "5000"
 
     # Username is the username needed to authorize an observer to push data
-    Username = ""
+    Username = "xoxnouser"
 
     # Password is the password needed to authorize an observer to push event data
-    Password = ""
+    Password = "bG5atWZqkiEAxWS"
 
     # CheckDuplicates signals if the events received from observers have been already pushed to clients
     # Requires a redis instance/cluster and should be used when multiple observers push from the same shard
@@ -15,7 +15,7 @@
 [Redis]
     # The url used to connect to a pubsub server
     # Note: not required for running in the notifier mode
-    Url = "redis://localhost:6379/0"
+    Url = "redis://redis.internal.livelysmoke-45e2a824.westeurope.azurecontainerapps.io:6379/0"
 
     # The pubsub channel used for publishing/subscribing
     # Note: not required for running in the notifier mode

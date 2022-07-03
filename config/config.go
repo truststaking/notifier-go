@@ -98,9 +98,8 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	// 	return nil, err
 	// }
 
-	cfg.ConnectorApi.Username = "xoxnouser"
-	cfg.ConnectorApi.Password = "bG5atWZqkiEAxWS"
-	// cfg.Redis.Url = "rediss://:sD2VfqU37NdUl7AoA4H9juXt9sFw6YhDNAzCaJr3vbA=@trustmarket.redis.cache.windows.net:6380/0"
+	// cfg.ConnectorApi.Username = "xoxnouser"
+	// cfg.ConnectorApi.Password = ""
 	cfg.RabbitMQ.Url = "amqp://user:IExbuMmsviBP2@trustrabbitmqkdemcstsrkh42-vm0.westeurope.cloudapp.azure.com:5672"
 	return cfg, err
 }
