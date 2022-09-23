@@ -55,10 +55,10 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		closeChan:          make(chan struct{}),
 	}
 
-	err = rp.createExchanges()
-	if err != nil {
-		return nil, err
-	}
+	// err = rp.createExchanges()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	return rp, nil
 }
