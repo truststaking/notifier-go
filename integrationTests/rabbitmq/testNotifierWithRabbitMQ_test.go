@@ -63,7 +63,6 @@ func pushEventsRequest(webServer *integrationTests.TestWebServer, mutResponses *
 		LogEvents: []data.Event{
 			{
 				Address: "addr1",
-				TxHash:  "txHash1",
 			},
 		},
 	}

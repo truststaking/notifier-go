@@ -3,6 +3,7 @@ package rabbitmq
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/ElrondNetwork/elrond-go-core/core/check"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
@@ -44,7 +45,7 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		return nil, err
 	}
 
-	rp := &rabbitMqPublisher{
+	return &rabbitMqPublisher{
 		broadcast:          make(chan data.BlockEvents),
 		broadcastRevert:    make(chan data.RevertBlock),
 		broadcastFinalized: make(chan data.FinalizedBlock),
@@ -53,88 +54,28 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		cfg:                args.Config,
 		client:             args.Client,
 		closeChan:          make(chan struct{}),
-	}
-
-	err = rp.createExchanges()
-	if err != nil {
-		return nil, err
-	}
-
-	return rp, nil
+	}, nil
 }
 
 func checkArgs(args ArgsRabbitMqPublisher) error {
 	if check.IfNil(args.Client) {
 		return ErrNilRabbitMqClient
 	}
-
-	if args.Config.EventsExchange.Name == "" {
-		return ErrInvalidRabbitMqExchangeName
+	if args.Config.EventsExchange == "" {
+		return fmt.Errorf("empty events exchange name: %w", ErrInvalidRabbitMqExchangeName)
 	}
-	if args.Config.EventsExchange.Type == "" {
-		return ErrInvalidRabbitMqExchangeType
+	if args.Config.RevertEventsExchange == "" {
+		return fmt.Errorf("empty revert exchange name: %w", ErrInvalidRabbitMqExchangeName)
 	}
-	if args.Config.RevertEventsExchange.Name == "" {
-		return ErrInvalidRabbitMqExchangeName
+	if args.Config.FinalizedEventsExchange == "" {
+		return fmt.Errorf("empty finalized exchange name: %w", ErrInvalidRabbitMqExchangeName)
 	}
-	if args.Config.RevertEventsExchange.Type == "" {
-		return ErrInvalidRabbitMqExchangeType
+	if args.Config.BlockTxsExchange == "" {
+		return fmt.Errorf("empty block txs exchange name: %w", ErrInvalidRabbitMqExchangeName)
 	}
-	if args.Config.FinalizedEventsExchange.Name == "" {
-		return ErrInvalidRabbitMqExchangeName
+	if args.Config.BlockScrsExchange == "" {
+		return fmt.Errorf("empty block scrs exchange name: %w", ErrInvalidRabbitMqExchangeName)
 	}
-	if args.Config.FinalizedEventsExchange.Type == "" {
-		return ErrInvalidRabbitMqExchangeType
-	}
-	if args.Config.BlockTxsExchange.Name == "" {
-		return ErrInvalidRabbitMqExchangeName
-	}
-	if args.Config.BlockTxsExchange.Type == "" {
-		return ErrInvalidRabbitMqExchangeType
-	}
-	if args.Config.BlockScrsExchange.Name == "" {
-		return ErrInvalidRabbitMqExchangeName
-	}
-	if args.Config.BlockScrsExchange.Type == "" {
-		return ErrInvalidRabbitMqExchangeType
-	}
-
-	return nil
-}
-
-// checkAndCreateExchanges creates exchanges if they are not existing already
-func (rp *rabbitMqPublisher) createExchanges() error {
-	err := rp.createExchange(rp.cfg.EventsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.RevertEventsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.FinalizedEventsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.BlockTxsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.BlockScrsExchange)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (rp *rabbitMqPublisher) createExchange(conf config.RabbitMQExchangeConfig) error {
-	err := rp.client.ExchangeDeclare(conf.Name, conf.Type)
-	if err != nil {
-		return err
-	}
-
-	log.Info("checked and declared rabbitMQ exchange", "name", conf.Name, "type", conf.Type)
 
 	return nil
 }
@@ -224,7 +165,7 @@ func (rp *rabbitMqPublisher) publishToExchanges(events data.BlockEvents) {
 		return
 	}
 
-	err = rp.publishFanout(rp.cfg.EventsExchange.Name, eventsBytes)
+	err = rp.publishFanout(rp.cfg.EventsExchange, eventsBytes)
 	if err != nil {
 		log.Error("failed to publish events to rabbitMQ", "err", err.Error())
 	}
@@ -237,7 +178,7 @@ func (rp *rabbitMqPublisher) publishRevertToExchange(revertBlock data.RevertBloc
 		return
 	}
 
-	err = rp.publishFanout(rp.cfg.RevertEventsExchange.Name, revertBlockBytes)
+	err = rp.publishFanout(rp.cfg.RevertEventsExchange, revertBlockBytes)
 	if err != nil {
 		log.Error("failed to publish revert event to rabbitMQ", "err", err.Error())
 	}
@@ -250,7 +191,7 @@ func (rp *rabbitMqPublisher) publishFinalizedToExchange(finalizedBlock data.Fina
 		return
 	}
 
-	err = rp.publishFanout(rp.cfg.FinalizedEventsExchange.Name, finalizedBlockBytes)
+	err = rp.publishFanout(rp.cfg.FinalizedEventsExchange, finalizedBlockBytes)
 	if err != nil {
 		log.Error("failed to publish finalized event to rabbitMQ", "err", err.Error())
 	}
@@ -263,7 +204,7 @@ func (rp *rabbitMqPublisher) publishTxsToExchange(blockTxs data.BlockTxs) {
 		return
 	}
 
-	err = rp.publishFanout(rp.cfg.BlockTxsExchange.Name, txsBlockBytes)
+	err = rp.publishFanout(rp.cfg.BlockTxsExchange, txsBlockBytes)
 	if err != nil {
 		log.Error("failed to publish block txs event to rabbitMQ", "err", err.Error())
 	}
@@ -276,7 +217,7 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 		return
 	}
 
-	err = rp.publishFanout(rp.cfg.BlockScrsExchange.Name, scrsBlockBytes)
+	err = rp.publishFanout(rp.cfg.BlockScrsExchange, scrsBlockBytes)
 	if err != nil {
 		log.Error("failed to publish block scrs event to rabbitMQ", "err", err.Error())
 	}

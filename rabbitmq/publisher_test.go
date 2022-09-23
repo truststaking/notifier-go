@@ -20,26 +20,11 @@ func createMockArgsRabbitMqPublisher() rabbitmq.ArgsRabbitMqPublisher {
 	return rabbitmq.ArgsRabbitMqPublisher{
 		Client: &mocks.RabbitClientStub{},
 		Config: config.RabbitMQConfig{
-			EventsExchange: config.RabbitMQExchangeConfig{
-				Name: "allevents",
-				Type: "fanout",
-			},
-			RevertEventsExchange: config.RabbitMQExchangeConfig{
-				Name: "revert",
-				Type: "fanout",
-			},
-			FinalizedEventsExchange: config.RabbitMQExchangeConfig{
-				Name: "finalized",
-				Type: "fanout",
-			},
-			BlockTxsExchange: config.RabbitMQExchangeConfig{
-				Name: "blocktxs",
-				Type: "fanout",
-			},
-			BlockScrsExchange: config.RabbitMQExchangeConfig{
-				Name: "blockscrs",
-				Type: "fanout",
-			},
+			EventsExchange:          "allevents",
+			RevertEventsExchange:    "revert",
+			FinalizedEventsExchange: "finalized",
+			BlockTxsExchange:        "txs",
+			BlockScrsExchange:       "scrs",
 		},
 	}
 }
@@ -62,7 +47,7 @@ func TestRabbitMqPublisher(t *testing.T) {
 		t.Parallel()
 
 		args := createMockArgsRabbitMqPublisher()
-		args.Config.EventsExchange.Name = ""
+		args.Config.EventsExchange = ""
 
 		client, err := rabbitmq.NewRabbitMqPublisher(args)
 		require.True(t, check.IfNil(client))
@@ -73,7 +58,7 @@ func TestRabbitMqPublisher(t *testing.T) {
 		t.Parallel()
 
 		args := createMockArgsRabbitMqPublisher()
-		args.Config.RevertEventsExchange.Name = ""
+		args.Config.RevertEventsExchange = ""
 
 		client, err := rabbitmq.NewRabbitMqPublisher(args)
 		require.True(t, check.IfNil(client))
@@ -84,7 +69,7 @@ func TestRabbitMqPublisher(t *testing.T) {
 		t.Parallel()
 
 		args := createMockArgsRabbitMqPublisher()
-		args.Config.FinalizedEventsExchange.Name = ""
+		args.Config.FinalizedEventsExchange = ""
 
 		client, err := rabbitmq.NewRabbitMqPublisher(args)
 		require.True(t, check.IfNil(client))
@@ -95,7 +80,7 @@ func TestRabbitMqPublisher(t *testing.T) {
 		t.Parallel()
 
 		args := createMockArgsRabbitMqPublisher()
-		args.Config.BlockTxsExchange.Name = ""
+		args.Config.BlockTxsExchange = ""
 
 		client, err := rabbitmq.NewRabbitMqPublisher(args)
 		require.True(t, check.IfNil(client))
@@ -106,58 +91,20 @@ func TestRabbitMqPublisher(t *testing.T) {
 		t.Parallel()
 
 		args := createMockArgsRabbitMqPublisher()
-		args.Config.BlockScrsExchange.Name = ""
+		args.Config.BlockScrsExchange = ""
 
 		client, err := rabbitmq.NewRabbitMqPublisher(args)
 		require.True(t, check.IfNil(client))
 		require.True(t, errors.Is(err, rabbitmq.ErrInvalidRabbitMqExchangeName))
 	})
 
-	t.Run("invalid exchange type", func(t *testing.T) {
-		t.Parallel()
-
-		args := createMockArgsRabbitMqPublisher()
-		args.Config.EventsExchange.Type = ""
-
-		client, err := rabbitmq.NewRabbitMqPublisher(args)
-
-		require.True(t, check.IfNil(client))
-		require.True(t, errors.Is(err, rabbitmq.ErrInvalidRabbitMqExchangeType))
-
-		args.Config.RevertEventsExchange.Type = ""
-		require.True(t, check.IfNil(client))
-		require.True(t, errors.Is(err, rabbitmq.ErrInvalidRabbitMqExchangeType))
-
-		args.Config.FinalizedEventsExchange.Type = ""
-		require.True(t, check.IfNil(client))
-		require.True(t, errors.Is(err, rabbitmq.ErrInvalidRabbitMqExchangeType))
-
-		args.Config.BlockTxsExchange.Type = ""
-		require.True(t, check.IfNil(client))
-		require.True(t, errors.Is(err, rabbitmq.ErrInvalidRabbitMqExchangeType))
-
-		args.Config.BlockScrsExchange.Type = ""
-		require.True(t, check.IfNil(client))
-		require.True(t, errors.Is(err, rabbitmq.ErrInvalidRabbitMqExchangeType))
-	})
-
 	t.Run("should work", func(t *testing.T) {
 		t.Parallel()
 
 		args := createMockArgsRabbitMqPublisher()
-
-		wasCalled := false
-		args.Client = &mocks.RabbitClientStub{
-			ExchangeDeclareCalled: func(name, kind string) error {
-				wasCalled = true
-				return nil
-			},
-		}
-
 		client, err := rabbitmq.NewRabbitMqPublisher(args)
 		require.Nil(t, err)
 		require.NotNil(t, client)
-		require.True(t, wasCalled)
 	})
 }
 

@@ -9,12 +9,6 @@ import (
 
 const (
 	reconnectRetryMs = 500
-
-	// ExchangeDeclare constants
-	isDurable  = true
-	autoDelete = false
-	isInternal = false
-	noWait     = false
 )
 
 type rabbitMqClient struct {
@@ -43,19 +37,6 @@ func NewRabbitMQClient(url string) (*rabbitMqClient, error) {
 	}
 
 	return rc, nil
-}
-
-// ExchangeDeclare will declare an exchange
-func (rc *rabbitMqClient) ExchangeDeclare(name, kind string) error {
-	return rc.ch.ExchangeDeclare(
-		name,
-		kind,
-		isDurable,
-		autoDelete,
-		isInternal,
-		noWait,
-		nil,
-	)
 }
 
 // Publish will publich an item on the rabbitMq channel

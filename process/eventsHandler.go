@@ -86,7 +86,6 @@ func (eh *eventsHandler) HandlePushEvents(events data.BlockEvents) {
 			"block hash", events.Hash,
 			"will process", shouldProcessEvents,
 		)
-		events.Events = make([]data.Event, 0)
 	} else {
 		log.Info("received events for block",
 			"block hash", events.Hash,

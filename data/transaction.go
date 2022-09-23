@@ -25,7 +25,6 @@ type Event struct {
 	Identifier string   `json:"identifier"`
 	Topics     [][]byte `json:"topics"`
 	Data       []byte   `json:"data"`
-	TxHash     string   `json:"txHash"`
 }
 
 // BlockEvents holds events data for a block
