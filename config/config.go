@@ -6,9 +6,8 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azsecrets"
-	"github.com/ElrondNetwork/elrond-go-core/core"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
 )
+import "github.com/multiversx/mx-chain-core-go/core"
 
 // GeneralConfig defines the config setup based on main config file
 type GeneralConfig struct {

@@ -3,7 +3,7 @@ package shared
 import (
 	"net/http"
 
-	"github.com/ElrondNetwork/notifier-go/data"
+	"github.com/multiversx/mx-chain-notifier-go/data"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +23,8 @@ type GroupHandler interface {
 
 // FacadeHandler defines the behavior of a notifier base facade handler
 type FacadeHandler interface {
-	HandlePushEvents(events data.SaveBlockData)
+	HandlePushEventsV2(events data.ArgsSaveBlockData) error
+	HandlePushEventsV1(events data.SaveBlockData) error
 	HandleRevertEvents(revertBlock data.RevertBlock)
 	HandleFinalizedEvents(finalizedBlock data.FinalizedBlock)
 	GetConnectorUserAndPass() (string, string)

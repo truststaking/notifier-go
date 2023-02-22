@@ -1,19 +1,19 @@
-FROM golang:1.18 as builder
+FROM golang:1.17.6 as builder
 
-WORKDIR /elrond
+WORKDIR /multiversx
 COPY . .
 
-WORKDIR /elrond/cmd/notifier
+WORKDIR /multiversx/cmd/notifier
 
 RUN go build -o notifier
 
 # ===== SECOND STAGE ======
 FROM ubuntu:20.04
-COPY --from=builder /elrond/cmd/notifier /elrond
+COPY --from=builder /multiversx/cmd/notifier /multiversx
 
 EXPOSE 8080
 
-WORKDIR /elrond
+WORKDIR /multiversx
 
 ENTRYPOINT ["./notifier"]
 CMD ["--api-type", "rabbit-api"]

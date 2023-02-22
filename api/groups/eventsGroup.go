@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ElrondNetwork/elrond-go-core/core/check"
-	"github.com/ElrondNetwork/notifier-go/api/errors"
-	"github.com/ElrondNetwork/notifier-go/api/shared"
-	"github.com/ElrondNetwork/notifier-go/data"
 	"github.com/gin-gonic/gin"
+	"github.com/multiversx/mx-chain-core-go/core/check"
+	"github.com/multiversx/mx-chain-notifier-go/api/errors"
+	"github.com/multiversx/mx-chain-notifier-go/api/shared"
+	"github.com/multiversx/mx-chain-notifier-go/data"
 )
 
 const (
@@ -66,17 +66,42 @@ func (h *eventsGroup) GetAdditionalMiddlewares() []gin.HandlerFunc {
 }
 
 func (h *eventsGroup) pushEvents(c *gin.Context) {
-	var blockEvents data.SaveBlockData
-
-	err := c.Bind(&blockEvents)
+	pushEventsRawData, err := c.GetRawData()
 	if err != nil {
 		shared.JSONResponse(c, http.StatusBadRequest, nil, err.Error())
 		return
 	}
 
-	h.facade.HandlePushEvents(blockEvents)
+	blockEvents, err := UnmarshallBlockDataV1(pushEventsRawData)
+	if err == nil {
+		err = h.facade.HandlePushEventsV1(*blockEvents)
+		if err == nil {
+			shared.JSONResponse(c, http.StatusOK, nil, "")
+			return
+		}
+	}
+
+	err = h.pushEventsV2(pushEventsRawData)
+	if err != nil {
+		shared.JSONResponse(c, http.StatusBadRequest, nil, err.Error())
+		return
+	}
 
 	shared.JSONResponse(c, http.StatusOK, nil, "")
+}
+
+func (h *eventsGroup) pushEventsV2(pushEventsRawData []byte) error {
+	saveBlockData, err := UnmarshallBlockDataV2(pushEventsRawData)
+	if err != nil {
+		return err
+	}
+
+	err = h.facade.HandlePushEventsV2(*saveBlockData)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (h *eventsGroup) revertEvents(c *gin.Context) {

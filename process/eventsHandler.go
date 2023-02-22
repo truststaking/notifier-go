@@ -4,10 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/ElrondNetwork/elrond-go-core/core/check"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	"github.com/ElrondNetwork/notifier-go/config"
-	"github.com/ElrondNetwork/notifier-go/data"
+	"github.com/multiversx/mx-chain-core-go/core/check"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-notifier-go/common"
+	"github.com/multiversx/mx-chain-notifier-go/config"
+	"github.com/multiversx/mx-chain-notifier-go/data"
 )
 
 var log = logger.GetOrCreate("process")
@@ -61,12 +62,12 @@ func checkArgs(args ArgsEventsHandler) error {
 }
 
 // HandlePushEvents will handle push events received from observer
-func (eh *eventsHandler) HandlePushEvents(events data.BlockEvents) {
+func (eh *eventsHandler) HandlePushEvents(events data.BlockEvents) error {
 	if events.Hash == "" {
-		log.Warn("received empty events block hash",
+		log.Debug("received empty events block hash",
 			"will process", false,
 		)
-		return
+		return common.ErrReceivedEmptyEvents
 	}
 	shouldProcessEvents := true
 	if eh.config.CheckDuplicates {
@@ -78,7 +79,7 @@ func (eh *eventsHandler) HandlePushEvents(events data.BlockEvents) {
 			"block hash", events.Hash,
 			"processed", false,
 		)
-		return
+		return nil
 	}
 
 	if len(events.Events) == 0 {
@@ -95,6 +96,7 @@ func (eh *eventsHandler) HandlePushEvents(events data.BlockEvents) {
 	}
 
 	eh.publisher.Broadcast(events)
+	return nil
 }
 
 // HandleRevertEvents will handle revents events received from observer

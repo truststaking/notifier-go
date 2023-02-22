@@ -3,12 +3,13 @@ package integrationTests
 import (
 	"net/http"
 
-	"github.com/ElrondNetwork/notifier-go/data"
+	"github.com/multiversx/mx-chain-notifier-go/data"
 )
 
 // FacadeHandler defines facade behaviour
 type FacadeHandler interface {
-	HandlePushEvents(events data.SaveBlockData)
+	HandlePushEventsV2(events data.ArgsSaveBlockData) error
+	HandlePushEventsV1(events data.SaveBlockData) error
 	HandleRevertEvents(revertBlock data.RevertBlock)
 	HandleFinalizedEvents(finalizedBlock data.FinalizedBlock)
 	GetConnectorUserAndPass() (string, string)

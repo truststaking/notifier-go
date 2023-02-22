@@ -1,17 +1,17 @@
 package integrationTests
 
 import (
-	"github.com/ElrondNetwork/notifier-go/config"
-	"github.com/ElrondNetwork/notifier-go/disabled"
-	"github.com/ElrondNetwork/notifier-go/dispatcher"
-	"github.com/ElrondNetwork/notifier-go/dispatcher/hub"
-	"github.com/ElrondNetwork/notifier-go/dispatcher/ws"
-	"github.com/ElrondNetwork/notifier-go/facade"
-	"github.com/ElrondNetwork/notifier-go/filters"
-	"github.com/ElrondNetwork/notifier-go/mocks"
-	"github.com/ElrondNetwork/notifier-go/process"
-	"github.com/ElrondNetwork/notifier-go/rabbitmq"
-	"github.com/ElrondNetwork/notifier-go/redis"
+	"github.com/multiversx/mx-chain-notifier-go/config"
+	"github.com/multiversx/mx-chain-notifier-go/disabled"
+	"github.com/multiversx/mx-chain-notifier-go/dispatcher"
+	"github.com/multiversx/mx-chain-notifier-go/dispatcher/hub"
+	"github.com/multiversx/mx-chain-notifier-go/dispatcher/ws"
+	"github.com/multiversx/mx-chain-notifier-go/facade"
+	"github.com/multiversx/mx-chain-notifier-go/filters"
+	"github.com/multiversx/mx-chain-notifier-go/mocks"
+	"github.com/multiversx/mx-chain-notifier-go/process"
+	"github.com/multiversx/mx-chain-notifier-go/rabbitmq"
+	"github.com/multiversx/mx-chain-notifier-go/redis"
 )
 
 type testNotifier struct {
@@ -66,10 +66,19 @@ func NewTestNotifierWithWS(cfg *config.GeneralConfig) (*testNotifier, error) {
 		return nil, err
 	}
 
+	eventsInterceptorArgs := process.ArgsEventsInterceptor{
+		PubKeyConverter: &mocks.PubkeyConverterMock{},
+	}
+	eventsInterceptor, err := process.NewEventsInterceptor(eventsInterceptorArgs)
+	if err != nil {
+		return nil, err
+	}
+
 	facadeArgs := facade.ArgsNotifierFacade{
-		EventsHandler: eventsHandler,
-		APIConfig:     cfg.ConnectorApi,
-		WSHandler:     wsHandler,
+		EventsHandler:     eventsHandler,
+		APIConfig:         cfg.ConnectorApi,
+		WSHandler:         wsHandler,
+		EventsInterceptor: eventsInterceptor,
 	}
 	facade, err := facade.NewNotifierFacade(facadeArgs)
 	if err != nil {
@@ -114,11 +123,20 @@ func NewTestNotifierWithRabbitMq(cfg *config.GeneralConfig) (*testNotifier, erro
 		return nil, err
 	}
 
+	eventsInterceptorArgs := process.ArgsEventsInterceptor{
+		PubKeyConverter: &mocks.PubkeyConverterMock{},
+	}
+	eventsInterceptor, err := process.NewEventsInterceptor(eventsInterceptorArgs)
+	if err != nil {
+		return nil, err
+	}
+
 	wsHandler := &disabled.WSHandler{}
 	facadeArgs := facade.ArgsNotifierFacade{
-		EventsHandler: eventsHandler,
-		APIConfig:     cfg.ConnectorApi,
-		WSHandler:     wsHandler,
+		EventsHandler:     eventsHandler,
+		APIConfig:         cfg.ConnectorApi,
+		WSHandler:         wsHandler,
+		EventsInterceptor: eventsInterceptor,
 	}
 	facade, err := facade.NewNotifierFacade(facadeArgs)
 	if err != nil {

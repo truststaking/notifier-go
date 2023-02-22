@@ -1,10 +1,10 @@
 package mocks
 
-import "github.com/ElrondNetwork/notifier-go/data"
+import "github.com/multiversx/mx-chain-notifier-go/data"
 
 // EventsHandlerStub implements EventsHandler interface
 type EventsHandlerStub struct {
-	HandlePushEventsCalled      func(events data.BlockEvents)
+	HandlePushEventsCalled      func(events data.BlockEvents) error
 	HandleRevertEventsCalled    func(revertBlock data.RevertBlock)
 	HandleFinalizedEventsCalled func(finalizedBlock data.FinalizedBlock)
 	HandleBlockTxsCalled        func(blockTxs data.BlockTxs)
@@ -12,10 +12,12 @@ type EventsHandlerStub struct {
 }
 
 // HandlePushEvents -
-func (e *EventsHandlerStub) HandlePushEvents(events data.BlockEvents) {
+func (e *EventsHandlerStub) HandlePushEvents(events data.BlockEvents) error {
 	if e.HandlePushEventsCalled != nil {
-		e.HandlePushEventsCalled(events)
+		return e.HandlePushEventsCalled(events)
 	}
+
+	return nil
 }
 
 // HandleRevertEvents -

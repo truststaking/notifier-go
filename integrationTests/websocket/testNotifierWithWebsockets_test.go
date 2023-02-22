@@ -1,16 +1,17 @@
 package websocket
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"sync"
 	"testing"
 	"time"
 
-	"github.com/ElrondNetwork/elrond-go-core/data/smartContractResult"
-	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
-	"github.com/ElrondNetwork/notifier-go/common"
-	"github.com/ElrondNetwork/notifier-go/data"
-	"github.com/ElrondNetwork/notifier-go/integrationTests"
+	"github.com/multiversx/mx-chain-core-go/data/smartContractResult"
+	"github.com/multiversx/mx-chain-core-go/data/transaction"
+	"github.com/multiversx/mx-chain-notifier-go/common"
+	"github.com/multiversx/mx-chain-notifier-go/data"
+	"github.com/multiversx/mx-chain-notifier-go/integrationTests"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -39,16 +40,35 @@ func TestNotifierWithWebsockets_PushEvents(t *testing.T) {
 
 	ws.SendSubscribeMessage(subscribeEvent)
 
+	addr := []byte("addr1")
 	events := []data.Event{
 		{
-			Address: "addr1",
+			Address: hex.EncodeToString(addr),
 			TxHash:  "txHash1",
 		},
 	}
-	blockEvents := &data.SaveBlockData{
-		Hash:      "hash1",
-		LogEvents: events,
+	saveBlockData := data.ArgsSaveBlockData{
+		HeaderHash: []byte("hash1"),
+		TransactionsPool: &data.TransactionsPool{
+			Logs: []*data.LogData{
+				{
+					LogHandler: &transaction.Log{
+						Events: []*transaction.Event{
+							{
+								Address: addr,
+							},
+						},
+					},
+					TxHash: "txHash1",
+				},
+			},
+		},
 	}
+	blockEvents := &data.ArgsSaveBlock{
+		HeaderType:        "HeaderV2",
+		ArgsSaveBlockData: saveBlockData,
+	}
+
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
 
@@ -186,19 +206,33 @@ func TestNotifierWithWebsockets_TxsEvents(t *testing.T) {
 
 	ws.SendSubscribeMessage(subscribeEvent)
 
-	blockHash := "hash1"
-	txs := map[string]transaction.Transaction{
-		"txhash1": {
+	blockHash := []byte("hash1")
+	txs := map[string]data.TransactionWithOrder{
+		"hash1": {
+			TransactionHandler: &transaction.Transaction{
+				Nonce: 1,
+			},
+		},
+	}
+	saveBlockData := data.ArgsSaveBlockData{
+		HeaderHash: blockHash,
+		TransactionsPool: &data.TransactionsPool{
+			Txs: txs,
+		},
+	}
+	blockEvents := &data.ArgsSaveBlock{
+		HeaderType:        "HeaderV2",
+		ArgsSaveBlockData: saveBlockData,
+	}
+
+	expTxs := map[string]*transaction.Transaction{
+		"hash1": {
 			Nonce: 1,
 		},
 	}
-	blockEvents := &data.SaveBlockData{
-		Hash: blockHash,
-		Txs:  txs,
-	}
 	expBlockTxs := &data.BlockTxs{
-		Hash: blockHash,
-		Txs:  txs,
+		Hash: hex.EncodeToString(blockHash),
+		Txs:  expTxs,
 	}
 
 	wg := &sync.WaitGroup{}
@@ -243,19 +277,33 @@ func TestNotifierWithWebsockets_ScrsEvents(t *testing.T) {
 
 	ws.SendSubscribeMessage(subscribeEvent)
 
-	blockHash := "hash1"
-	scrs := map[string]smartContractResult.SmartContractResult{
+	blockHash := []byte("hash1")
+	scrs := map[string]data.SmartContractResultWithOrder{
+		"hash2": {
+			TransactionHandler: &smartContractResult.SmartContractResult{
+				Nonce: 2,
+			},
+		},
+	}
+	saveBlockData := data.ArgsSaveBlockData{
+		HeaderHash: blockHash,
+		TransactionsPool: &data.TransactionsPool{
+			Scrs: scrs,
+		},
+	}
+	blockEvents := &data.ArgsSaveBlock{
+		HeaderType:        "HeaderV2",
+		ArgsSaveBlockData: saveBlockData,
+	}
+
+	expScrs := map[string]*smartContractResult.SmartContractResult{
 		"hash2": {
 			Nonce: 2,
 		},
 	}
-	blockEvents := &data.SaveBlockData{
-		Hash: blockHash,
-		Scrs: scrs,
-	}
 	expBlockScrs := &data.BlockScrs{
-		Hash: blockHash,
-		Scrs: scrs,
+		Hash: hex.EncodeToString(blockHash),
+		Scrs: expScrs,
 	}
 
 	wg := &sync.WaitGroup{}
@@ -322,36 +370,70 @@ func TestNotifierWithWebsockets_AllEvents(t *testing.T) {
 		Hash: "hash1",
 	}
 
+	addr := []byte("addr1")
 	events := []data.Event{
 		{
-			Address: "addr1",
+			Address: hex.EncodeToString(addr),
 		},
 	}
 
-	txs := map[string]transaction.Transaction{
-		"txhash1": {
+	txs := map[string]data.TransactionWithOrder{
+		"hash1": {
+			TransactionHandler: &transaction.Transaction{
+				Nonce: 1,
+			},
+		},
+	}
+	scrs := map[string]data.SmartContractResultWithOrder{
+		"hash2": {
+			TransactionHandler: &smartContractResult.SmartContractResult{
+				Nonce: 2,
+			},
+		},
+	}
+	blockHash := []byte("hash1")
+
+	expTxs := map[string]*transaction.Transaction{
+		"hash1": {
 			Nonce: 1,
 		},
 	}
-	scrs := map[string]smartContractResult.SmartContractResult{
-		"txhash2": {
+	blockTxs := &data.BlockTxs{
+		Hash: hex.EncodeToString(blockHash),
+		Txs:  expTxs,
+	}
+
+	expScrs := map[string]*smartContractResult.SmartContractResult{
+		"hash2": {
 			Nonce: 2,
 		},
 	}
-	blockHash := "hash1"
-	blockTxs := &data.BlockTxs{
-		Hash: blockHash,
-		Txs:  txs,
-	}
 	blockScrs := &data.BlockScrs{
-		Hash: blockHash,
-		Scrs: scrs,
+		Hash: hex.EncodeToString(blockHash),
+		Scrs: expScrs,
 	}
-	blockEvents := &data.SaveBlockData{
-		Hash:      blockHash,
-		LogEvents: events,
-		Txs:       txs,
-		Scrs:      scrs,
+
+	saveBlockData := data.ArgsSaveBlockData{
+		HeaderHash: []byte(blockHash),
+		TransactionsPool: &data.TransactionsPool{
+			Txs:  txs,
+			Scrs: scrs,
+			Logs: []*data.LogData{
+				{
+					LogHandler: &transaction.Log{
+						Events: []*transaction.Event{
+							{
+								Address: addr,
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	blockEvents := &data.ArgsSaveBlock{
+		HeaderType:        "HeaderV2",
+		ArgsSaveBlockData: saveBlockData,
 	}
 
 	numEvents := 5

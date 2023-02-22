@@ -8,13 +8,15 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ElrondNetwork/elrond-go-core/core/check"
-	"github.com/ElrondNetwork/elrond-go-core/data/smartContractResult"
-	"github.com/ElrondNetwork/elrond-go-core/data/transaction"
-	apiErrors "github.com/ElrondNetwork/notifier-go/api/errors"
-	"github.com/ElrondNetwork/notifier-go/api/groups"
-	"github.com/ElrondNetwork/notifier-go/data"
-	"github.com/ElrondNetwork/notifier-go/mocks"
+	"github.com/multiversx/mx-chain-core-go/core/check"
+	"github.com/multiversx/mx-chain-core-go/data/block"
+	"github.com/multiversx/mx-chain-core-go/data/smartContractResult"
+	"github.com/multiversx/mx-chain-core-go/data/transaction"
+	apiErrors "github.com/multiversx/mx-chain-notifier-go/api/errors"
+	"github.com/multiversx/mx-chain-notifier-go/api/groups"
+	"github.com/multiversx/mx-chain-notifier-go/common"
+	"github.com/multiversx/mx-chain-notifier-go/data"
+	"github.com/multiversx/mx-chain-notifier-go/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -78,34 +80,100 @@ func TestEventsGroup_PushEvents(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, resp.Code)
 	})
 
-	t.Run("should work", func(t *testing.T) {
+	t.Run("facade error, will try push events v2, should fail", func(t *testing.T) {
 		t.Parallel()
 
-		blockEvents := data.SaveBlockData{
+		blockEvents := &data.SaveBlockData{
 			Hash: "hash1",
-			Txs: map[string]transaction.Transaction{
+			Txs: map[string]*transaction.Transaction{
 				"hash2": {
 					Nonce: 2,
 				},
 			},
-			Scrs: map[string]smartContractResult.SmartContractResult{
+			Scrs: map[string]*smartContractResult.SmartContractResult{
 				"hash3": {
 					Nonce: 3,
 				},
 			},
-			LogEvents: []data.Event{
-				{
-					Address: "addr1",
-				},
-			},
+			LogEvents: []data.Event{},
 		}
+
 		jsonBytes, _ := json.Marshal(blockEvents)
 
 		wasCalled := false
 		facade := &mocks.FacadeStub{
-			HandlePushEventsCalled: func(events data.SaveBlockData) {
+			HandlePushEventsV1Called: func(events data.SaveBlockData) error {
 				wasCalled = true
-				assert.Equal(t, blockEvents, events)
+				return errors.New("facade error")
+			},
+		}
+
+		eg, err := groups.NewEventsGroup(facade)
+		require.Nil(t, err)
+
+		ws := startWebServer(eg, eventsPath)
+
+		req, _ := http.NewRequest("POST", "/events/push", bytes.NewBuffer(jsonBytes))
+		req.Header.Set("Content-Type", "application/json")
+		resp := httptest.NewRecorder()
+
+		ws.ServeHTTP(resp, req)
+
+		assert.True(t, wasCalled)
+		assert.Equal(t, http.StatusBadRequest, resp.Code)
+	})
+
+	t.Run("should work", func(t *testing.T) {
+		t.Parallel()
+
+		argsSaveBlockData := data.ArgsSaveBlockData{
+			HeaderHash: []byte{},
+			Body:       &block.Body{},
+			Header:     &block.HeaderV2{},
+			TransactionsPool: &data.TransactionsPool{
+				Txs: map[string]data.TransactionWithOrder{
+					"hash2": {
+						TransactionHandler: &transaction.Transaction{
+							Nonce: 2,
+						},
+						ExecutionOrder: 1,
+					},
+				},
+				Scrs: map[string]data.SmartContractResultWithOrder{
+					"hash3": {
+						TransactionHandler: &smartContractResult.SmartContractResult{
+							Nonce: 3,
+						},
+						ExecutionOrder: 1,
+					},
+				},
+				Logs: []*data.LogData{
+					{
+						LogHandler: &transaction.Log{
+							Address: []byte("logaddr1"),
+							Events:  []*transaction.Event{},
+						},
+						TxHash: "logHash1",
+					},
+				},
+			},
+		}
+		blockEvents := data.ArgsSaveBlock{
+			HeaderType:        "HeaderV2",
+			ArgsSaveBlockData: argsSaveBlockData,
+		}
+
+		jsonBytes, _ := json.Marshal(blockEvents)
+
+		wasCalled := false
+		facade := &mocks.FacadeStub{
+			HandlePushEventsV1Called: func(eventsData data.SaveBlockData) error {
+				return common.ErrReceivedEmptyEvents
+			},
+			HandlePushEventsV2Called: func(events data.ArgsSaveBlockData) error {
+				wasCalled = true
+				assert.Equal(t, argsSaveBlockData, events)
+				return nil
 			},
 		}
 

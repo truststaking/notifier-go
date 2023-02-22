@@ -1,10 +1,16 @@
 package factory
 
 import (
-	"github.com/ElrondNetwork/notifier-go/common"
-	"github.com/ElrondNetwork/notifier-go/config"
-	"github.com/ElrondNetwork/notifier-go/process"
+	"github.com/multiversx/mx-chain-core-go/core/pubkeyConverter"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-notifier-go/common"
+	"github.com/multiversx/mx-chain-notifier-go/config"
+	"github.com/multiversx/mx-chain-notifier-go/process"
 )
+
+var log = logger.GetOrCreate("factory")
+
+const addrPubKeyConverterLength = 32
 
 // ArgsEventsHandlerFactory defines the arguments needed for events handler creation
 type ArgsEventsHandlerFactory struct {
@@ -48,4 +54,18 @@ func getPublisher(
 	default:
 		return nil, common.ErrInvalidAPIType
 	}
+}
+
+// CreateEventsInterceptor will create the events interceptor
+func CreateEventsInterceptor() (process.EventsInterceptor, error) {
+	pubKeyConverter, err := pubkeyConverter.NewBech32PubkeyConverter(addrPubKeyConverterLength, log)
+	if err != nil {
+		return nil, err
+	}
+
+	argsEventsInterceptor := process.ArgsEventsInterceptor{
+		PubKeyConverter: pubKeyConverter,
+	}
+
+	return process.NewEventsInterceptor(argsEventsInterceptor)
 }

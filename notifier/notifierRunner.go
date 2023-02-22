@@ -4,14 +4,14 @@ import (
 	"os"
 	"os/signal"
 
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	"github.com/ElrondNetwork/notifier-go/api/gin"
-	"github.com/ElrondNetwork/notifier-go/api/shared"
-	"github.com/ElrondNetwork/notifier-go/config"
-	"github.com/ElrondNetwork/notifier-go/dispatcher"
-	"github.com/ElrondNetwork/notifier-go/facade"
-	"github.com/ElrondNetwork/notifier-go/factory"
-	"github.com/ElrondNetwork/notifier-go/rabbitmq"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-notifier-go/api/gin"
+	"github.com/multiversx/mx-chain-notifier-go/api/shared"
+	"github.com/multiversx/mx-chain-notifier-go/config"
+	"github.com/multiversx/mx-chain-notifier-go/dispatcher"
+	"github.com/multiversx/mx-chain-notifier-go/facade"
+	"github.com/multiversx/mx-chain-notifier-go/factory"
+	"github.com/multiversx/mx-chain-notifier-go/rabbitmq"
 )
 
 var log = logger.GetOrCreate("notifierRunner")
@@ -65,10 +65,16 @@ func (nr *notifierRunner) Start() error {
 		return err
 	}
 
+	eventsInterceptor, err := factory.CreateEventsInterceptor()
+	if err != nil {
+		return err
+	}
+
 	facadeArgs := facade.ArgsNotifierFacade{
-		EventsHandler: eventsHandler,
-		APIConfig:     nr.configs.ConnectorApi,
-		WSHandler:     wsHandler,
+		EventsHandler:     eventsHandler,
+		APIConfig:         nr.configs.ConnectorApi,
+		WSHandler:         wsHandler,
+		EventsInterceptor: eventsInterceptor,
 	}
 	facade, err := facade.NewNotifierFacade(facadeArgs)
 	if err != nil {
