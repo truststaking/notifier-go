@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Sun Jul  3 16:06:07 2022
+# Make data base, printed on Wed Feb 22 22:51:19 2023
 
 # Variables
 
@@ -18,8 +18,6 @@ make: *** No rule to make target `all'.  Stop.
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
-# environment
-VSCODE_LOG_NATIVE = false
 # makefile (from `Makefile', line 113)
 test_data_file = ./examples/requests.json
 # environment
@@ -43,21 +41,17 @@ MAKEFILE_LIST :=  Makefile
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-VSCODE_VERBOSE_LOGGING = true
-# environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # makefile (from `Makefile', line 60)
 dockerfile = Dockerfile
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/vscode-ipc-e2f5c5ab-1949-43aa-951c-0e12f3cfecd6.sock
-# environment
 VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /Users/truststaking/elrondsdk:/Users/truststaking/.nvm/versions/node/v17.3.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin
+PATH = /Users/truststaking/.volta/bin:/Users/truststaking/.volta/bin:/Users/truststaking/elrondsdk:/Users/truststaking/.nvm/versions/node/v17.3.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin
 # makefile (from `Makefile', line 36)
 api_type = "rabbit-api"
 # environment
@@ -65,17 +59,13 @@ GOPATH = /Users/truststaking/go
 # environment
 NVM_BIN = /Users/truststaking/.nvm/versions/node/v17.3.0/bin
 # environment
-VSCODE_LOG_STACK = false
-# environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.jMoo2X3HIF/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.FzLCm9iVZ0/Listeners
 # automatic
 %F = $(notdir $%)
-# environment
-VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /Users/truststaking/Documents/GitHub/mihai/notifier-go
 # environment
@@ -89,11 +79,11 @@ GOMODCACHE = /Users/truststaking/go/pkg/mod
 # environment
 HOME = /Users/truststaking
 # default
-MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # makefile (from `Makefile', line 57)
 image_tag = "latest"
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
+VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/441438abd1ac652551dbe4d408dfcec8a499b8bf
 # environment
 LOGNAME = truststaking
 # environment
@@ -112,6 +102,8 @@ MAKE = $(MAKE_COMMAND)
 MAKECMDGOALS := all
 # environment
 SHLVL = 1
+# environment
+VOLTA_HOME = /Users/truststaking/.volta
 # default
 MAKE_VERSION := 3.81
 # environment
@@ -123,7 +115,7 @@ USER = truststaking
 # makefile (from `Makefile', line 56)
 image = "notifier"
 # default
-MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
 # default
 .VARIABLES := 
 # environment
@@ -131,7 +123,9 @@ TMPDIR = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.68.1-main.sock
+VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.75.1-main.sock
+# environment
+MallocNanoZone = 0
 # makefile (from `Makefile', line 23)
 cmd_dir = cmd/notifier
 # makefile (from `Makefile', line 24)
@@ -145,7 +139,7 @@ MFLAGS = -Rrqp
 # environment
 NVM_DIR = /Users/truststaking/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.39664631.39664637
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.82728998.82729004
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -177,11 +171,11 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 9260
+VSCODE_PID = 84852
 # makefile (from `Makefile', line 58)
 container_name = notifier
 # variable set hash-table stats:
-# Load=83/1024=8%, Rehash=0, Collisions=2/111=2%
+# Load=80/1024=8%, Rehash=0, Collisions=2/108=2%
 
 # Pattern-specific Variable Values
 
@@ -189,9 +183,9 @@ container_name = notifier
 
 # Directories
 
-# . (device 16777233, inode 40832603): 31 files, no impossibilities.
+# . (device 16777233, inode 40832603): 30 files, no impossibilities.
 
-# 31 files, no impossibilities in 1 directories.
+# 30 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -260,7 +254,7 @@ docker-start:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-01 18:49:52
+#  Last modified 2022-07-01 19:49:52
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -317,12 +311,12 @@ help:
 
 request-test:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 119):
 	curl \
 	-X POST \
+ 
 	-H "Content-Type: application/json" \
 	-u aaaa:aaa \
 	-d @${test_data_file} \
@@ -431,6 +425,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sun Jul  3 16:06:07 2022
+# Finished Make data base on Wed Feb 22 22:51:19 2023
 
  

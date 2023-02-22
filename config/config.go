@@ -60,7 +60,6 @@ type FlagsConfig struct {
 	APIType           string
 }
 
-var log = logger.GetOrCreate("eventNotifier")
 
 // LoadConfig return a GeneralConfig instance by reading the provided toml file
 func LoadConfig(filePath string) (*GeneralConfig, error) {
@@ -72,25 +71,21 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	}
 	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", "TrustMarketVault")
 
-	log.Info(keyVaultUrl)
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		return nil, err
 	}
-	log.Info("After cred")
+
 	client, err := azsecrets.NewClient(keyVaultUrl, cred, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Info("Client created")
 	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
 	if err != nil {
-		log.Error("failed to get the secret: %v", err)
 		return nil, err
 	}
 
-	log.Info("After url")
 	nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", nil)
 	if err != nil {
 		return nil, err

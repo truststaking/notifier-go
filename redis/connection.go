@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 
-	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-notifier-go/config"
 	"github.com/go-redis/redis/v8"
 )
