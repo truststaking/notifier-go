@@ -3,6 +3,7 @@ package rabbitmq
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus"
 	"github.com/multiversx/mx-chain-core-go/core/check"
@@ -46,6 +47,7 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 	}
 
 	client, err := azservicebus.NewClientFromConnectionString(args.Config.AzureCredentials, nil)
+
 	if err != nil {
 		return nil, err
 	}
@@ -302,21 +304,67 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		if err != nil {
 			log.Error("Error unmarshalling JSON data for service bus:", err)
 		}
+		currentMessageBatch, err := sender.NewMessageBatch(context.Background(), nil)
 
-		for _, value := range events.Events {
-			event, err := json.Marshal(value)
+		if err != nil {
+			log.Error("error creating message batch for service bus:", err)
+		}
+
+		for i := 0; i < len(events.Events); i++ {
+			event, err := json.Marshal(events.Events[i])
 			if err != nil {
 				log.Error("Error marshalling JSON data for service bus:", err)
 			}
-			err = sender.SendMessage(context.TODO(), &azservicebus.Message{
+			// Add a message to our message batch. This can be called multiple times.
+			err = currentMessageBatch.AddMessage(&azservicebus.Message{
 				Body: event,
 			}, nil)
+
+			if errors.Is(err, azservicebus.ErrMessageTooLarge) {
+				if currentMessageBatch.NumMessages() == 0 {
+					log.Error("Single message is too large to be sent in a batch.")
+					return err
+				}
+
+				log.Info("Message batch is full. Sending it and creating a new one.")
+
+				// send what we have since the batch is full
+				err := sender.SendMessageBatch(context.Background(), currentMessageBatch, nil)
+
+				if err != nil {
+					log.Error("Error sending the batch of messages", err)
+					return err
+				}
+
+				// Create a new batch and retry adding this message to our batch.
+				newBatch, err := sender.NewMessageBatch(context.Background(), nil)
+
+				if err != nil {
+					log.Error("Error creating a new batch of messages", err)
+				}
+
+				currentMessageBatch = newBatch
+
+				// rewind the counter and attempt to add the message again (this batch
+				// was full so it didn't go out with the previous SendMessageBatch call).
+				i--
+			} else if err != nil {
+				log.Error("Error adding message to batch", err)
+			}
 			if err != nil {
 				log.Error("Error sending the event to Service Bus", err)
 				return err
 			}
 		}
+		// check if any messages are remaining to be sent.
+		if currentMessageBatch.NumMessages() > 0 {
+			err := sender.SendMessageBatch(context.Background(), currentMessageBatch, nil)
 
+			if err != nil {
+				log.Error("Error send remaining messages in batch", err)
+			}
+		}
+		sender.Close(context.Background())
 	}
 
 	return rp.client.Publish(

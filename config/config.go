@@ -6,8 +6,8 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azsecrets"
+	"github.com/multiversx/mx-chain-core-go/core"
 )
-import "github.com/multiversx/mx-chain-core-go/core"
 
 // GeneralConfig defines the config setup based on main config file
 type GeneralConfig struct {
@@ -39,7 +39,7 @@ type RedisConfig struct {
 // RabbitMQConfig maps the rabbitMQ configuration
 type RabbitMQConfig struct {
 	Url                     string
-	AzureCredentials		string
+	AzureCredentials        string
 	EventsExchange          RabbitMQExchangeConfig
 	RevertEventsExchange    RabbitMQExchangeConfig
 	FinalizedEventsExchange RabbitMQExchangeConfig
@@ -102,7 +102,7 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 		return nil, err
 	}
 
-	azurePubSub, err := client.GetSecret(context.TODO(), "AzureWebPubSub", nil)
+	serviceBus, err := client.GetSecret(context.TODO(), "ServiceBusConnectionString", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -111,6 +111,6 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	cfg.ConnectorApi.Password = *nodesPassword.Value
 	cfg.RabbitMQ.Url = *rabbitURL.Value
 	cfg.Redis.Url = *redisURL.Value
-	cfg.Azure = *azurePubSub.Value
+	cfg.RabbitMQ.AzureCredentials = *serviceBus.Value
 	return cfg, err
 }
