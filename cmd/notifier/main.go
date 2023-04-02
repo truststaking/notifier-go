@@ -105,9 +105,9 @@ func startEventNotifierProxy(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Info("before load")
+	
 	cfg, err := config.LoadConfig(flagsConfig.GeneralConfigPath)
-	log.Info("after load")
+
 	if err != nil {
 		return err
 	}
