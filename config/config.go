@@ -13,6 +13,7 @@ import "github.com/multiversx/mx-chain-core-go/core"
 type GeneralConfig struct {
 	ConnectorApi ConnectorApiConfig
 	Redis        RedisConfig
+	Azure        string
 	RabbitMQ     RabbitMQConfig
 	Flags        *FlagsConfig
 }
@@ -38,6 +39,7 @@ type RedisConfig struct {
 // RabbitMQConfig maps the rabbitMQ configuration
 type RabbitMQConfig struct {
 	Url                     string
+	AzureCredentials		string
 	EventsExchange          RabbitMQExchangeConfig
 	RevertEventsExchange    RabbitMQExchangeConfig
 	FinalizedEventsExchange RabbitMQExchangeConfig
@@ -59,7 +61,6 @@ type FlagsConfig struct {
 	WorkingDir        string
 	APIType           string
 }
-
 
 // LoadConfig return a GeneralConfig instance by reading the provided toml file
 func LoadConfig(filePath string) (*GeneralConfig, error) {
@@ -101,9 +102,15 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 		return nil, err
 	}
 
+	azurePubSub, err := client.GetSecret(context.TODO(), "AzureWebPubSub", nil)
+	if err != nil {
+		return nil, err
+	}
+
 	cfg.ConnectorApi.Username = *nodesUsername.Value
 	cfg.ConnectorApi.Password = *nodesPassword.Value
 	cfg.RabbitMQ.Url = *rabbitURL.Value
 	cfg.Redis.Url = *redisURL.Value
+	cfg.Azure = *azurePubSub.Value
 	return cfg, err
 }

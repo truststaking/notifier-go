@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus"
 	"github.com/multiversx/mx-chain-core-go/core/check"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-notifier-go/config"
@@ -32,14 +33,19 @@ type rabbitMqPublisher struct {
 	broadcastFinalized chan data.FinalizedBlock
 	broadcastTxs       chan data.BlockTxs
 	broadcastScrs      chan data.BlockScrs
-
-	cancelFunc func()
-	closeChan  chan struct{}
+	azure              *azservicebus.Client
+	cancelFunc         func()
+	closeChan          chan struct{}
 }
 
 // NewRabbitMqPublisher creates a new rabbitMQ publisher instance
 func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error) {
 	err := checkArgs(args)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := azservicebus.NewClientFromConnectionString(args.Config.AzureCredentials, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -52,6 +58,7 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		broadcastScrs:      make(chan data.BlockScrs),
 		cfg:                args.Config,
 		client:             args.Client,
+		azure:              client,
 		closeChan:          make(chan struct{}),
 	}
 
@@ -102,42 +109,42 @@ func checkArgs(args ArgsRabbitMqPublisher) error {
 	return nil
 }
 
-// checkAndCreateExchanges creates exchanges if they are not existing already
-func (rp *rabbitMqPublisher) createExchanges() error {
-	err := rp.createExchange(rp.cfg.EventsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.RevertEventsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.FinalizedEventsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.BlockTxsExchange)
-	if err != nil {
-		return err
-	}
-	err = rp.createExchange(rp.cfg.BlockScrsExchange)
-	if err != nil {
-		return err
-	}
+// // checkAndCreateExchanges creates exchanges if they are not existing already
+// func (rp *rabbitMqPublisher) createExchanges() error {
+// 	err := rp.createExchange(rp.cfg.EventsExchange)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	err = rp.createExchange(rp.cfg.RevertEventsExchange)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	err = rp.createExchange(rp.cfg.FinalizedEventsExchange)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	err = rp.createExchange(rp.cfg.BlockTxsExchange)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	err = rp.createExchange(rp.cfg.BlockScrsExchange)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
-func (rp *rabbitMqPublisher) createExchange(conf config.RabbitMQExchangeConfig) error {
-	err := rp.client.ExchangeDeclare(conf.Name, conf.Type)
-	if err != nil {
-		return err
-	}
+// func (rp *rabbitMqPublisher) createExchange(conf config.RabbitMQExchangeConfig) error {
+// 	err := rp.client.ExchangeDeclare(conf.Name, conf.Type)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	log.Info("checked and declared rabbitMQ exchange", "name", conf.Name, "type", conf.Type)
+// 	log.Info("checked and declared rabbitMQ exchange", "name", conf.Name, "type", conf.Type)
 
-	return nil
-}
+// 	return nil
+// }
 
 // Run is launched as a goroutine and listens for events on the exposed channels
 func (rp *rabbitMqPublisher) Run() {
@@ -283,6 +290,35 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 }
 
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
+
+	if exchangeName == "all_events" {
+		sender, err := rp.azure.NewSender("all_events", nil)
+		if err != nil {
+			log.Error("could not send the payload to azure service bus", "err", err.Error())
+			return err
+		}
+		var events data.BlockEvents
+		err = json.Unmarshal(payload, &events)
+		if err != nil {
+			log.Error("Error unmarshalling JSON data for service bus:", err)
+		}
+
+		for _, value := range events.Events {
+			event, err := json.Marshal(value)
+			if err != nil {
+				log.Error("Error marshalling JSON data for service bus:", err)
+			}
+			err = sender.SendMessage(context.TODO(), &azservicebus.Message{
+				Body: event,
+			}, nil)
+			if err != nil {
+				log.Error("Error sending the event to Service Bus", err)
+				return err
+			}
+		}
+
+	}
+
 	return rp.client.Publish(
 		exchangeName,
 		emptyStr,
