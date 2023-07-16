@@ -315,10 +315,14 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 			if err != nil {
 				log.Error("Error marshalling JSON data for service bus:", err)
 			}
-			// Add a message to our message batch. This can be called multiple times.
-			err = currentMessageBatch.AddMessage(&azservicebus.Message{
-				Body: event,
-			}, nil)
+
+			msg := &azservicebus.Message{
+				Body:                  event,
+				ApplicationProperties: make(map[string]interface{})}
+			msg.ApplicationProperties["Address"] = events.Events[i].Address
+
+			msg.ApplicationProperties["Identifier"] = events.Events[i].Identifier
+			err = currentMessageBatch.AddMessage(msg, nil)
 
 			if errors.Is(err, azservicebus.ErrMessageTooLarge) {
 				if currentMessageBatch.NumMessages() == 0 {
