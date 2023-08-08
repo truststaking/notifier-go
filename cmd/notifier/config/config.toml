@@ -12,9 +12,12 @@
     # Requires a redis instance/cluster and should be used when multiple observers push from the same shard
     CheckDuplicates = true
 
+# [Azure]
+#     KeyVault = "TrustMarketVault"
+#     Topic = 'all_events'
 [Azure]
-    KeyVault = "TrustMarketVault"
-    Topic = 'all_events'
+  KeyVault = "trustmarketdevnetvault"
+  Topic = 'mvx_events_raw_devnet'
 
 [Redis]
     # The url used to connect to a pubsub server
