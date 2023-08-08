@@ -295,6 +295,8 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
 
+	log.Error("exchangeName", exchangeName);
+	
 	if exchangeName == "all_events" {
 		sender, err := rp.azure.NewSender(rp.cfg.Topic, nil)
 		if err != nil {

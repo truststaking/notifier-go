@@ -83,8 +83,9 @@ func (w *webServer) Run() error {
 		port = fmt.Sprintf(":%s", port)
 	}
 
-	engine := gin.Default()
+	engine := gin.New()
 	engine.Use(cors.Default())
+	engine.Use(gin.Recovery())
 	engine.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
