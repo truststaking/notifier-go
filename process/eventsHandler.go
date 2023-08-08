@@ -94,7 +94,6 @@ func (eh *eventsHandler) HandlePushEvents(events data.BlockEvents) error {
 			"will process", shouldProcessEvents,
 		)
 	}
-	log.Debug("will broadcast events", "events", events)
 	eh.publisher.Broadcast(events)
 	return nil
 }
