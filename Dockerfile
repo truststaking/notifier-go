@@ -16,4 +16,4 @@ EXPOSE 8080
 WORKDIR /multiversx
 
 ENTRYPOINT ["./notifier"]
-CMD ["--api-type", "rabbit-api", '--general-config', './config/config.toml']
+CMD ["--api-type", "rabbit-api"]
