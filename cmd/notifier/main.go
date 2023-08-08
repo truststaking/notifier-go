@@ -63,7 +63,7 @@ VERSION:
 	apiType = cli.StringFlag{
 		Name:  "api-type",
 		Usage: "This flag specifies the api type, it defines the way in which it will expose the events. Options: rabbit-api | notifier",
-		Value: "notifier",
+		Value: "rabbit-api",
 	}
 )
 

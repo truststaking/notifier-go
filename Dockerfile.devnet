@@ -13,9 +13,8 @@ RUN apt-get update && apt-get install -y openssl ca-certificates
 
 COPY --from=builder /multiversx/cmd/notifier /multiversx
 
-EXPOSE 8080
+EXPOSE 5000
 
 WORKDIR /multiversx
 
-ENTRYPOINT ["./notifier"]
-CMD ["--api-type", "rabbit-api", '--general-config', 'config/config.devnet.toml']
+ENTRYPOINT ["./notifier", '--general-config', 'config/config.devnet.toml']
