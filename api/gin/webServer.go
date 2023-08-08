@@ -6,15 +6,15 @@ import (
 	"strings"
 	"sync"
 
-	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/multiversx/mx-chain-core-go/core/check"
+	logger "github.com/multiversx/mx-chain-logger-go"
 	apiErrors "github.com/multiversx/mx-chain-notifier-go/api/errors"
 	"github.com/multiversx/mx-chain-notifier-go/api/groups"
 	"github.com/multiversx/mx-chain-notifier-go/api/shared"
 	"github.com/multiversx/mx-chain-notifier-go/common"
 	"github.com/multiversx/mx-chain-notifier-go/config"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 )
 
 var log = logger.GetOrCreate("api/gin")
@@ -85,7 +85,11 @@ func (w *webServer) Run() error {
 
 	engine := gin.Default()
 	engine.Use(cors.Default())
-
+	engine.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 	err = w.createGroups()
 	if err != nil {
 		return err
