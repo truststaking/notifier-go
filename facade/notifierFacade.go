@@ -68,7 +68,7 @@ func (nf *notifierFacade) HandlePushEventsV2(allEvents data.ArgsSaveBlockData) e
 		Hash:   eventsData.Hash,
 		Events: eventsData.LogEvents,
 	}
-	log.Debug("will handle push events", "events", pushEvents)
+
 	err = nf.eventsHandler.HandlePushEvents(pushEvents)
 	if err != nil {
 		return err

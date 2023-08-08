@@ -10,7 +10,7 @@ import (
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-notifier-go/config"
 	"github.com/multiversx/mx-chain-notifier-go/data"
-	"github.com/streadway/amqp"
+	// "github.com/streadway/amqp"
 )
 
 const (
@@ -35,7 +35,7 @@ type rabbitMqPublisher struct {
 	broadcastTxs       chan data.BlockTxs
 	broadcastScrs      chan data.BlockScrs
 	azure              *azservicebus.Client
-	topic 			   string
+	topic              string
 	cancelFunc         func()
 	closeChan          chan struct{}
 }
@@ -62,7 +62,7 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		cfg:                args.Config,
 		client:             args.Client,
 		azure:              client,
-		topic: 				args.Config.Topic,
+		topic:              args.Config.Topic,
 		closeChan:          make(chan struct{}),
 	}
 
@@ -191,7 +191,6 @@ func (rp *rabbitMqPublisher) run(ctx context.Context) {
 
 // Broadcast will handle the block events pushed by producers and sends them to rabbitMQ channel
 func (rp *rabbitMqPublisher) Broadcast(events data.BlockEvents) {
-	log.Debug("broadcasting events");
 	select {
 	case rp.broadcast <- events:
 	case <-rp.closeChan:
@@ -297,8 +296,6 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
 
-	log.Error("exchangeName", exchangeName);
-
 	if exchangeName == "all_events" {
 		sender, err := rp.azure.NewSender(rp.cfg.Topic, nil)
 		if err != nil {
@@ -317,6 +314,9 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		}
 
 		for i := 0; i < len(events.Events); i++ {
+			if events.Events[i].Identifier == "completedTxEvent" || events.Events[i].Identifier == "signalError" || events.Events[i].Identifier == "internalVMErrors" || events.Events[i].Identifier == "writeLog" {
+				continue
+			}
 			event, err := json.Marshal(events.Events[i])
 			if err != nil {
 				log.Error("Error marshalling JSON data for service bus:", err)
@@ -377,15 +377,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		sender.Close(context.Background())
 	}
 
-	return rp.client.Publish(
-		exchangeName,
-		emptyStr,
-		true,  // mandatory
-		false, // immediate
-		amqp.Publishing{
-			Body: payload,
-		},
-	)
+	return nil
 }
 
 // Close will close the channels
