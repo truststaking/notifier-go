@@ -159,6 +159,7 @@ func (rp *rabbitMqPublisher) Run() {
 }
 
 func (rp *rabbitMqPublisher) run(ctx context.Context) {
+	log.Debug("RabbitMQ publisher is running...")
 	for {
 		select {
 		case <-ctx.Done():
@@ -190,6 +191,7 @@ func (rp *rabbitMqPublisher) run(ctx context.Context) {
 
 // Broadcast will handle the block events pushed by producers and sends them to rabbitMQ channel
 func (rp *rabbitMqPublisher) Broadcast(events data.BlockEvents) {
+	log.Debug("broadcasting events");
 	select {
 	case rp.broadcast <- events:
 	case <-rp.closeChan:
@@ -296,7 +298,7 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
 
 	log.Error("exchangeName", exchangeName);
-	
+
 	if exchangeName == "all_events" {
 		sender, err := rp.azure.NewSender(rp.cfg.Topic, nil)
 		if err != nil {

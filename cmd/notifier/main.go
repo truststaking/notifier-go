@@ -40,7 +40,7 @@ VERSION:
 	logLevel = cli.StringFlag{
 		Name:  "log-level",
 		Usage: "This flag specifies the log level. Options: *:NONE | ERROR | WARN | INFO | DEBUG | TRACE",
-		Value: fmt.Sprintf("*:%s", logger.LogInfo.String()),
+		Value: fmt.Sprintf("*:%s", logger.LogDebug.String()),
 	}
 
 	logSaveFile = cli.BoolFlag{
