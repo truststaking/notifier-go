@@ -159,7 +159,7 @@ func (rp *rabbitMqPublisher) Run() {
 }
 
 func (rp *rabbitMqPublisher) run(ctx context.Context) {
-	log.Debug("RabbitMQ publisher is running...")
+
 	for {
 		select {
 		case <-ctx.Done():
