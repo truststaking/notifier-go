@@ -1,4 +1,4 @@
-FROM golang:1.17.6 as builder
+FROM golang:alpine as builder
 
 WORKDIR /multiversx
 COPY . .
@@ -8,7 +8,7 @@ WORKDIR /multiversx/cmd/notifier
 RUN go build -o notifier
 
 # ===== SECOND STAGE ======
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 COPY --from=builder /multiversx/cmd/notifier /multiversx
 
 EXPOSE 8080
