@@ -1,4 +1,4 @@
-name: Trigger auto deployment for notifier-devnet
+name: Trigger auto deployment for notifier-devnet v1
 
 # When this action will be executed
 on:
