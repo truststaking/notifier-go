@@ -35,6 +35,7 @@ type rabbitMqPublisher struct {
 	broadcastTxs       chan data.BlockTxs
 	broadcastScrs      chan data.BlockScrs
 	azure              *azservicebus.Client
+	topic 			   string
 	cancelFunc         func()
 	closeChan          chan struct{}
 }
@@ -61,6 +62,7 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		cfg:                args.Config,
 		client:             args.Client,
 		azure:              client,
+		topic: 				args.Config.Topic,
 		closeChan:          make(chan struct{}),
 	}
 
@@ -294,7 +296,7 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
 
 	if exchangeName == "all_events" {
-		sender, err := rp.azure.NewSender("all_events", nil)
+		sender, err := rp.azure.NewSender(rp.cfg.Topic, nil)
 		if err != nil {
 			log.Error("could not send the payload to azure service bus", "err", err.Error())
 			return err

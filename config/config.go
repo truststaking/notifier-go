@@ -28,6 +28,7 @@ type ConnectorApiConfig struct {
 
 type AzureConfig struct {
 	KeyVault string
+	Topic    string
 }
 
 // RedisConfig maps the redis configuration
@@ -44,6 +45,7 @@ type RedisConfig struct {
 type RabbitMQConfig struct {
 	Url                     string
 	AzureCredentials        string
+	Topic                   string
 	EventsExchange          RabbitMQExchangeConfig
 	RevertEventsExchange    RabbitMQExchangeConfig
 	FinalizedEventsExchange RabbitMQExchangeConfig
@@ -74,9 +76,7 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(cfg)
 	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", cfg.Azure.KeyVault)
-	fmt.Println(keyVaultUrl)
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		return nil, err
@@ -117,5 +117,6 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	cfg.RabbitMQ.Url = *rabbitURL.Value
 	cfg.Redis.Url = *redisURL.Value
 	cfg.RabbitMQ.AzureCredentials = *serviceBus.Value
+	cfg.RabbitMQ.Topic = cfg.Azure.Topic
 	return cfg, err
 }
