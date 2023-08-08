@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Sun Apr  2 21:07:57 2023
+# Make data base, printed on Tue Aug  8 16:15:32 2023
 
 # Variables
 
@@ -53,7 +53,7 @@ VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin
+PATH = /Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/.cargo/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/truststaking/.pub-cache/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin
 # makefile (from `Makefile', line 36)
 api_type = "rabbit-api"
 # environment
@@ -65,7 +65,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.FzLCm9iVZ0/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.N3EYq6I60M/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -85,7 +85,7 @@ MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # makefile (from `Makefile', line 57)
 image_tag = "latest"
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/7f329fe6c66b0f86ae1574c2911b681ad5a45d63
+VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/2ccd690cbff1569e4a83d7c43d45101f817401dc
 # environment
 LOGNAME = truststaking
 # environment
@@ -106,6 +106,8 @@ MAKECMDGOALS := all
 SHLVL = 1
 # environment
 VOLTA_HOME = /Users/truststaking/.volta
+# environment
+JAVA_HOME = /Applications/Android Studio.app/Contents/jbr/Contents/Home
 # default
 MAKE_VERSION := 3.81
 # environment
@@ -125,7 +127,7 @@ TMPDIR = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.77-main.sock
+VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.80-main.sock
 # environment
 MallocNanoZone = 0
 # makefile (from `Makefile', line 23)
@@ -141,7 +143,7 @@ MFLAGS = -Rrqp
 # environment
 NVM_DIR = /Users/truststaking/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.91867106.91867112
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.118707730.118707737
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -173,13 +175,13 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 79960
+VSCODE_PID = 47426
 # environment
 NPM_TOKEN = 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
 # makefile (from `Makefile', line 58)
 container_name = notifier
 # variable set hash-table stats:
-# Load=82/1024=8%, Rehash=0, Collisions=2/110=2%
+# Load=83/1024=8%, Rehash=0, Collisions=2/111=2%
 
 # Pattern-specific Variable Values
 
@@ -187,7 +189,7 @@ container_name = notifier
 
 # Directories
 
-# . (device 16777233, inode 40832603): 30 files, no impossibilities.
+# . (device 16777234, inode 40832603): 30 files, no impossibilities.
 
 # 30 files, no impossibilities in 1 directories.
 
@@ -258,7 +260,7 @@ docker-start:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-01 19:49:52
+#  Last modified 2022-07-01 18:49:52
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -278,6 +280,7 @@ test:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 #  commands to execute (from `Makefile', line 12):
 	@echo "  >  Running unit tests"
 	go test -cover -race -coverprofile=coverage.txt -covermode=atomic -v ./...
@@ -302,7 +305,6 @@ docker-logs:
 	
 
 help:
- 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -429,6 +431,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sun Apr  2 21:07:57 2023
+# Finished Make data base on Tue Aug  8 16:15:32 2023
 
  

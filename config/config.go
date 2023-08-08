@@ -13,7 +13,7 @@ import (
 type GeneralConfig struct {
 	ConnectorApi ConnectorApiConfig
 	Redis        RedisConfig
-	Azure        string
+	AzureVault        string
 	RabbitMQ     RabbitMQConfig
 	Flags        *FlagsConfig
 }
@@ -70,7 +70,7 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", "TrustMarketVault")
+	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", cfg.AzureVault)
 
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
