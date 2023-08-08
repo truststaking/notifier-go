@@ -17,4 +17,5 @@ EXPOSE 5000
 
 WORKDIR /multiversx
 
-ENTRYPOINT ["./notifier", '--general-config', 'config/config.devnet.toml']
+ENTRYPOINT ["./notifier"]
+CMD ["--general-config", "config/config.devnet.toml"]
