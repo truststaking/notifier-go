@@ -18,3 +18,4 @@ EXPOSE 5000
 WORKDIR /multiversx
 
 ENTRYPOINT ["./notifier"]
+CMD ["--api-type", "rabbit-api"]
