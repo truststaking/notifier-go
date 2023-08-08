@@ -5,7 +5,7 @@ on:
   # Automatically trigger it when detected changes in repo
   push:
     branches: 
-      [ master ]
+      [ main ]
     paths:
     - '**'
     - '.github/workflows/notifier-devnet-AutoDeployTrigger-ff66798e-611c-4ba0-baa0-6e439a1eb39f.yml'
