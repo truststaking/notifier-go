@@ -11,7 +11,10 @@
     # CheckDuplicates signals if the events received from observers have been already pushed to clients
     # Requires a redis instance/cluster and should be used when multiple observers push from the same shard
     CheckDuplicates = true
-AzureVault = "TrustMarketVault"
+
+[Azure]
+    KeyVault = "TrustMarketVault"
+
 [Redis]
     # The url used to connect to a pubsub server
     # Note: not required for running in the notifier mode

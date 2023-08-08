@@ -13,7 +13,7 @@ import (
 type GeneralConfig struct {
 	ConnectorApi ConnectorApiConfig
 	Redis        RedisConfig
-	AzureVault        string
+	Azure        AzureConfig
 	RabbitMQ     RabbitMQConfig
 	Flags        *FlagsConfig
 }
@@ -24,6 +24,10 @@ type ConnectorApiConfig struct {
 	Username        string
 	Password        string
 	CheckDuplicates bool
+}
+
+type AzureConfig struct {
+	KeyVault string
 }
 
 // RedisConfig maps the redis configuration
@@ -71,7 +75,7 @@ func LoadConfig(filePath string) (*GeneralConfig, error) {
 		return nil, err
 	}
 	fmt.Println(cfg)
-	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", cfg.AzureVault)
+	keyVaultUrl := fmt.Sprintf("https://%s.vault.azure.net/", cfg.Azure.KeyVault)
 	fmt.Println(keyVaultUrl)
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
