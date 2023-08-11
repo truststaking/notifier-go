@@ -10,6 +10,7 @@ import (
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-notifier-go/config"
 	"github.com/multiversx/mx-chain-notifier-go/data"
+	"github.com/streadway/amqp"
 	// "github.com/streadway/amqp"
 )
 
@@ -377,7 +378,15 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		sender.Close(context.Background())
 	}
 
-	return nil
+	return rp.client.Publish(
+		exchangeName,
+		emptyStr,
+		true,  // mandatory
+		false, // immediate
+		amqp.Publishing{
+			Body: payload,
+		},
+	)
 }
 
 // Close will close the channels
