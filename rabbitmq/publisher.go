@@ -296,7 +296,7 @@ func (rp *rabbitMqPublisher) publishScrsToExchange(blockScrs data.BlockScrs) {
 
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
 
-	if exchangeName == "all_events" {
+	if exchangeName == rp.cfg.EventsExchange.Name {
 		sender, err := rp.azure.NewSender(rp.cfg.Topic, nil)
 		if err != nil {
 			log.Error("could not send the payload to azure service bus", "err", err.Error())
