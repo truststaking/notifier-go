@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Aug  8 16:15:32 2023
+# Make data base, printed on Fri Aug 11 17:23:01 2023
 
 # Variables
 
@@ -85,7 +85,7 @@ MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # makefile (from `Makefile', line 57)
 image_tag = "latest"
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/2ccd690cbff1569e4a83d7c43d45101f817401dc
+VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/6445d93c81ebe42c4cbd7a60712e0b17d9463e97
 # environment
 LOGNAME = truststaking
 # environment
@@ -127,7 +127,7 @@ TMPDIR = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.80-main.sock
+VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.81-main.sock
 # environment
 MallocNanoZone = 0
 # makefile (from `Makefile', line 23)
@@ -143,7 +143,7 @@ MFLAGS = -Rrqp
 # environment
 NVM_DIR = /Users/truststaking/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.118707730.118707737
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.120426116.120426122
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -175,7 +175,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 47426
+VSCODE_PID = 83694
 # environment
 NPM_TOKEN = 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
 # makefile (from `Makefile', line 58)
@@ -189,9 +189,9 @@ container_name = notifier
 
 # Directories
 
-# . (device 16777234, inode 40832603): 30 files, no impossibilities.
+# . (device 16777234, inode 40832603): 28 files, no impossibilities.
 
-# 30 files, no impossibilities in 1 directories.
+# 28 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -431,6 +431,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Aug  8 16:15:32 2023
+# Finished Make data base on Fri Aug 11 17:23:01 2023
 
  
