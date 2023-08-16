@@ -68,3 +68,8 @@
     [RabbitMQ.BlockScrsExchange]
         Name = "block_scrs_dev"
         Type = "fanout"
+
+        # The exchange which holds block events with additional info
+    [RabbitMQ.BlockEventsExchange]
+        Name = "block_events_dev"
+        Type = "fanout"
