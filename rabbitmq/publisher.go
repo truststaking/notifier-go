@@ -325,6 +325,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 
 			msg := &azservicebus.Message{
 				Body:                  event,
+				SessionID:             &events.Hash,
 				ApplicationProperties: make(map[string]interface{})}
 			msg.ApplicationProperties["Address"] = events.Events[i].Address
 
