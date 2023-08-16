@@ -333,13 +333,13 @@ func (rp *rabbitMqPublisher) publishBlockEventsWithOrderToExchange(blockTxs data
 
 func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) error {
 
-	if exchangeName == rp.cfg.EventsExchange.Name {
+	if exchangeName == rp.cfg.BlockEventsExchange.Name {
 		sender, err := rp.azure.NewSender(rp.cfg.Topic, nil)
 		if err != nil {
 			log.Error("could not send the payload to azure service bus", "err", err.Error())
 			return err
 		}
-		var events data.BlockEvents
+		var events data.BlockEventsWithOrder
 		err = json.Unmarshal(payload, &events)
 		if err != nil {
 			log.Error("Error unmarshalling JSON data for service bus:", err)
