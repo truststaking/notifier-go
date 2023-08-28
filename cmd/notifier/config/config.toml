@@ -14,7 +14,7 @@
 
 [Azure]
     KeyVault = "TrustMarketVault"
-    Topic = 'all_events'
+    Topic = 'mvx_events_raw'
 
 [Redis]
     # The url used to connect to a pubsub server
