@@ -4,8 +4,9 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/multiversx/mx-chain-notifier-go/config"
 	"github.com/go-redis/redis/v8"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-notifier-go/config"
 )
 
 // CreateSimpleClient will create a redis client for a redis setup with one instance
@@ -16,6 +17,8 @@ func CreateSimpleClient(cfg config.RedisConfig) (RedLockClient, error) {
 	}
 	opt.TLSConfig = &tls.Config{MinVersion: tls.VersionTLS12}
 	client := redis.NewClient(opt)
+
+	log.Debug("created redis instance connection type", "connection url", cfg.Url)
 
 	rc := NewRedisClientWrapper(client)
 	ok := rc.IsConnected(context.Background())
@@ -33,6 +36,8 @@ func CreateFailoverClient(cfg config.RedisConfig) (RedLockClient, error) {
 		SentinelAddrs: []string{cfg.SentinelUrl},
 	})
 	rc := NewRedisClientWrapper(client)
+
+	log.Debug("created redis sentinel connection type", "connection url", cfg.SentinelUrl, "master", cfg.MasterName)
 
 	ok := rc.IsConnected(context.Background())
 	if !ok {
