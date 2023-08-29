@@ -11,7 +11,6 @@ import (
 	"github.com/multiversx/mx-chain-notifier-go/config"
 	"github.com/multiversx/mx-chain-notifier-go/data"
 	"github.com/streadway/amqp"
-	// "github.com/streadway/amqp"
 )
 
 const (
@@ -37,8 +36,8 @@ type rabbitMqPublisher struct {
 	broadcastBlockEventsWithOrder chan data.BlockEventsWithOrder
 	broadcastScrs                 chan data.BlockScrs
 
-	azure              *azservicebus.Client
-	topic              string
+	azure      *azservicebus.Client
+	topic      string
 	cancelFunc func()
 	closeChan  chan struct{}
 }
@@ -66,8 +65,8 @@ func NewRabbitMqPublisher(args ArgsRabbitMqPublisher) (*rabbitMqPublisher, error
 		cfg:                           args.Config,
 		client:                        args.Client,
 		closeChan:                     make(chan struct{}),
-		azure:              client,
-		topic:              args.Config.Topic,
+		azure:                         client,
+		topic:                         args.Config.Topic,
 	}
 
 	// err = rp.createExchanges()

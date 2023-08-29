@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azsecrets"
+	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azsecrets"
 	"github.com/multiversx/mx-chain-core-go/core"
 )
 
@@ -111,27 +111,27 @@ func LoadGeneralConfig(filePath string) (*GeneralConfig, error) {
 		return nil, err
 	}
 
-	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", nil)
+	rabbitURL, err := client.GetSecret(context.TODO(), "RabbitMqConnectionString", "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", nil)
+	nodesUsername, err := client.GetSecret(context.TODO(), "SquadNotifierUsername", "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	nodesPassword, err := client.GetSecret(context.TODO(), "SquadNotifierPassword", nil)
+	nodesPassword, err := client.GetSecret(context.TODO(), "SquadNotifierPassword", "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	redisURL, err := client.GetSecret(context.TODO(), "NotifierRedisURL", nil)
+	redisURL, err := client.GetSecret(context.TODO(), "NotifierRedisURL", "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	serviceBus, err := client.GetSecret(context.TODO(), "ServiceBusConnectionString", nil)
+	serviceBus, err := client.GetSecret(context.TODO(), "ServiceBusConnectionString", "", nil)
 	if err != nil {
 		return nil, err
 	}

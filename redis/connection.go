@@ -9,6 +9,8 @@ import (
 	"github.com/multiversx/mx-chain-notifier-go/config"
 )
 
+var log = logger.GetOrCreate("redis/groups")
+
 // CreateSimpleClient will create a redis client for a redis setup with one instance
 func CreateSimpleClient(cfg config.RedisConfig) (RedLockClient, error) {
 	opt, err := redis.ParseURL(cfg.Url)
