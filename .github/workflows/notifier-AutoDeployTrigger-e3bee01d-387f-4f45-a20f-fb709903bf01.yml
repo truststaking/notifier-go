@@ -7,7 +7,7 @@ on:
     branches: 
       [ main ]
     paths:
-    - '//**'
+    - '**'
     - '.github/workflows/notifier-AutoDeployTrigger-e3bee01d-387f-4f45-a20f-fb709903bf01.yml'
 
   # Allow mannually trigger 
