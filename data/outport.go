@@ -18,6 +18,7 @@ type WebSocketEvent struct {
 
 // Event holds event data
 type Event struct {
+	LogAddress string   `json:"logAddress"`
 	Address    string   `json:"address"`
 	Identifier string   `json:"identifier"`
 	Topics     [][]byte `json:"topics"`

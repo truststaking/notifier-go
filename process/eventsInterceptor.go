@@ -13,6 +13,7 @@ import (
 
 // logEvent defines a log event associated with corresponding tx hash
 type logEvent struct {
+	Address      []byte
 	EventHandler nodeData.EventHandler
 	TxHash       string
 }
@@ -102,8 +103,8 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 			le := &logEvent{
 				EventHandler: eventHandler,
 				TxHash:       logData.TxHash,
+				Address:      logData.LogHandler.GetAddress(),
 			}
-
 			logEvents = append(logEvents, le)
 		}
 	}
@@ -119,14 +120,17 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 		}
 
 		bech32Address := ei.pubKeyConverter.Encode(event.EventHandler.GetAddress())
+		bech32MainLogAddress := ei.pubKeyConverter.Encode(event.Address)
 		eventIdentifier := string(event.EventHandler.GetIdentifier())
 
-		log.Debug("eventsInterceptor: received event from address",
+		log.Error("eventsInterceptor: received event from log address",
+			"logAddress", bech32MainLogAddress,
 			"address", bech32Address,
 			"identifier", eventIdentifier,
 		)
 
 		events = append(events, data.Event{
+			LogAddress: bech32MainLogAddress,
 			Address:    bech32Address,
 			Identifier: eventIdentifier,
 			Topics:     event.EventHandler.GetTopics(),

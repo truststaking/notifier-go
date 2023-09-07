@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Thu Aug 17 00:19:49 2023
+# Make data base, printed on Mon Sep  4 16:49:30 2023
 
 # Variables
 
@@ -32,9 +32,9 @@ NVM_INC = /Users/truststaking/.nvm/versions/node/v18.15.0/include/node
 @F = $(notdir $@)
 # makefile
 CURDIR := /Users/truststaking/Documents/GitHub/mihai/notifier-go
- 
 # makefile (from `Makefile', line 1)
 SHELL := /bin/bash
+ 
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-gb","osLocale":"en-ro","availableLanguages":{},"_languagePackSupport":true}
 # environment
@@ -54,7 +54,7 @@ VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/.cargo/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/truststaking/.pub-cache/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin
+PATH = /Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/.cargo/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/truststaking/.pub-cache/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin
 # makefile (from `Makefile', line 36)
 api_type = "rabbit-api"
 # environment
@@ -66,7 +66,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.lM0HFYJrlZ/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.mCrre35KkU/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -176,7 +176,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 1316
+VSCODE_PID = 77852
 # environment
 NPM_TOKEN = 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
 # makefile (from `Makefile', line 58)
@@ -190,9 +190,9 @@ container_name = notifier
 
 # Directories
 
-# . (device 16777232, inode 40832603): 28 files, no impossibilities.
+# . (device 16777231, inode 40832603): 30 files, no impossibilities.
 
-# 28 files, no impossibilities in 1 directories.
+# 30 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -261,7 +261,6 @@ docker-start:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
- 
 #  Last modified 2022-07-01 18:49:52
 #  File has been updated.
 #  Successfully updated.
@@ -302,6 +301,7 @@ docker-logs:
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 83):
+ 
 	docker logs -f ${container_name}
 	
 
@@ -432,6 +432,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Thu Aug 17 00:19:49 2023
+# Finished Make data base on Mon Sep  4 16:49:30 2023
 
  

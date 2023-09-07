@@ -65,14 +65,14 @@ func (h *eventsGroup) pushEvents(c *gin.Context) {
 		return
 	}
 
-	blockEvents, err := UnmarshallBlockDataV1(pushEventsRawData)
-	if err == nil {
-		err = h.facade.HandlePushEventsV1(*blockEvents)
-		if err == nil {
-			shared.JSONResponse(c, http.StatusOK, nil, "")
-			return
-		}
-	}
+	// blockEvents, err := UnmarshallBlockDataV1(pushEventsRawData)
+	// if err == nil {
+	// 	err = h.facade.HandlePushEventsV1(*blockEvents)
+	// 	if err == nil {
+	// 		shared.JSONResponse(c, http.StatusOK, nil, "")
+	// 		return
+	// 	}
+	// }
 
 	err = h.pushEventsV2(pushEventsRawData)
 	if err != nil {
