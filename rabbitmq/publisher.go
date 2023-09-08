@@ -350,9 +350,15 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		}
 
 		for i := 0; i < len(events.Events); i++ {
-			if events.Events[i].Identifier == "completedTxEvent" || events.Events[i].Identifier == "signalError" || events.Events[i].Identifier == "internalVMErrors" || events.Events[i].Identifier == "writeLog" {
+			identifier := events.Events[i].Identifier
+			if identifier == "completedTxEvent" || identifier == "signalError" || identifier == "internalVMErrors" || identifier == "writeLog" {
 				continue
 			}
+
+			if events.Events[i].LogAddress == events.Events[i].Address && (identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer") {
+				continue
+			}
+
 			event, err := json.Marshal(events.Events[i])
 			if err != nil {
 				log.Error("Error marshalling JSON data for service bus:", err)
