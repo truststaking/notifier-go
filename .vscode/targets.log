@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Mon Sep  4 16:49:30 2023
+# Make data base, printed on Fri Sep  8 03:44:00 2023
 
 # Variables
 
@@ -34,7 +34,6 @@ NVM_INC = /Users/truststaking/.nvm/versions/node/v18.15.0/include/node
 CURDIR := /Users/truststaking/Documents/GitHub/mihai/notifier-go
 # makefile (from `Makefile', line 1)
 SHELL := /bin/bash
- 
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-gb","osLocale":"en-ro","availableLanguages":{},"_languagePackSupport":true}
 # environment
@@ -280,6 +279,7 @@ debug: build
 test:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 12):
 	@echo "  >  Running unit tests"
@@ -301,7 +301,6 @@ docker-logs:
 #  Modification time never checked.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 83):
- 
 	docker logs -f ${container_name}
 	
 
@@ -432,6 +431,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Mon Sep  4 16:49:30 2023
+# Finished Make data base on Fri Sep  8 03:44:00 2023
 
  

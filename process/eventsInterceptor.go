@@ -123,7 +123,7 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 		bech32MainLogAddress := ei.pubKeyConverter.Encode(event.Address)
 		eventIdentifier := string(event.EventHandler.GetIdentifier())
 
-		log.Error("eventsInterceptor: received event from log address",
+		log.Debug("eventsInterceptor: received event from log address",
 			"logAddress", bech32MainLogAddress,
 			"address", bech32Address,
 			"identifier", eventIdentifier,
