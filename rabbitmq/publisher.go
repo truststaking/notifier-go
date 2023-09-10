@@ -355,7 +355,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				continue
 			}
 
-			if events.Events[i].LogAddress == events.Events[i].Address && (identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer") {
+			if events.Events[i].LogAddress != events.Events[i].Address && (identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer") {
 				continue
 			}
 
