@@ -112,7 +112,7 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 	if len(logEvents) == 0 {
 		return nil
 	}
-
+	skipTransfers := false
 	events := make([]data.Event, 0, len(logEvents))
 	for _, event := range logEvents {
 		if event == nil || check.IfNil(event.EventHandler) {
@@ -128,6 +128,9 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 			"address", bech32Address,
 			"identifier", eventIdentifier,
 		)
+		if eventIdentifier == "signalError" || eventIdentifier == "internalVMErrors" {
+			skipTransfers = true
+		}
 
 		events = append(events, data.Event{
 			LogAddress: bech32MainLogAddress,
@@ -139,6 +142,17 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 		})
 	}
 
+	if skipTransfers {
+		var filteredItems []data.Event
+		for _, item := range events {
+			if item.Identifier == "MultiESDTNFTTransfer" || item.Identifier == "ESDTNFTTransfer" || item.Identifier == "ESDTTransfer" {
+				continue
+			}
+			filteredItems = append(filteredItems, item)
+		}
+
+		return filteredItems
+	}
 	return events
 }
 
