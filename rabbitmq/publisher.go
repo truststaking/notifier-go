@@ -7,6 +7,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus"
 	"github.com/multiversx/mx-chain-core-go/core/check"
+	"github.com/multiversx/mx-chain-core-go/core/pubkeyConverter"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-notifier-go/config"
 	"github.com/multiversx/mx-chain-notifier-go/data"
@@ -355,8 +356,15 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				continue
 			}
 
-			if events.Events[i].LogAddress != events.Events[i].Address && (identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer") {
-				continue
+			if identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer" {
+				pubKeyConverter, err := pubkeyConverter.NewBech32PubkeyConverter(32, log)
+				if err != nil {
+					return err
+				}
+				reciver := pubKeyConverter.Encode(events.Events[i].Topics[3])
+				if events.Events[i].LogAddress == reciver {
+					continue
+				}
 			}
 
 			event, err := json.Marshal(events.Events[i])
