@@ -87,11 +87,12 @@ func (w *webServer) Run() error {
 
 	var err error
 
-	if w.wasTriggered == true {
+	if w.wasTriggered {
 		log.Error("Web server has been already triggered successfuly once")
 		return nil
 	}
-
+	
+	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
 	engine.Use(cors.Default())
 	engine.Use(gin.Recovery())
