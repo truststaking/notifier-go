@@ -18,12 +18,14 @@ type WebSocketEvent struct {
 
 // Event holds event data
 type Event struct {
-	LogAddress string   `json:"logAddress"`
-	Address    string   `json:"address"`
-	Identifier string   `json:"identifier"`
-	Topics     [][]byte `json:"topics"`
-	Data       []byte   `json:"data"`
-	TxHash     string   `json:"txHash"`
+	LogAddress      string   `json:"logAddress"`
+	LogAddressShard int      `json:"logAddressShard"`
+	Address         string   `json:"address"`
+	AddressShard    int      `json:"addressShard"`
+	Identifier      string   `json:"identifier"`
+	Topics          [][]byte `json:"topics"`
+	Data            []byte   `json:"data"`
+	TxHash          string   `json:"txHash"`
 }
 
 // BlockEvents holds events data for a block

@@ -65,8 +65,15 @@ func CreateEventsInterceptor() (process.EventsInterceptor, error) {
 		return nil, err
 	}
 
+	hexKeyConverter, err := pubkeyConverter.NewHexPubkeyConverter(addrPubKeyConverterLength)
+	if err != nil {
+		return nil, err
+	}
+
+
 	argsEventsInterceptor := process.ArgsEventsInterceptor{
 		PubKeyConverter: pubKeyConverter,
+		HexKeyConvertor: hexKeyConverter,
 	}
 
 	return process.NewEventsInterceptor(argsEventsInterceptor)
