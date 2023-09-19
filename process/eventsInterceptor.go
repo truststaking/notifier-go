@@ -1,6 +1,7 @@
 package process
 
 import (
+	"bytes"
 	"encoding/hex"
 	"github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/core/check"
@@ -8,7 +9,6 @@ import (
 	"github.com/multiversx/mx-chain-core-go/data/smartContractResult"
 	"github.com/multiversx/mx-chain-core-go/data/transaction"
 	"github.com/multiversx/mx-chain-notifier-go/data"
-	"bytes"
 )
 
 // logEvent defines a log event associated with corresponding tx hash
@@ -35,8 +35,13 @@ func NewEventsInterceptor(args ArgsEventsInterceptor) (*eventsInterceptor, error
 		return nil, ErrNilPubKeyConverter
 	}
 
+	if check.IfNil(args.HexKeyConvertor) {
+		return nil, ErrNilPubKeyConverter
+	}
+
 	return &eventsInterceptor{
 		pubKeyConverter: args.PubKeyConverter,
+		hexKeyConvertor: args.HexKeyConvertor,
 	}, nil
 }
 
@@ -138,14 +143,14 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 		}
 
 		events = append(events, data.Event{
-			LogAddress: bech32MainLogAddress,
+			LogAddress:      bech32MainLogAddress,
 			LogAddressShard: shardMainLogAddress,
-			Address:    bech32Address,
-			AddressShard: shardAddress,
-			Identifier: eventIdentifier,
-			Topics:     event.EventHandler.GetTopics(),
-			Data:       event.EventHandler.GetData(),
-			TxHash:     event.TxHash,
+			Address:         bech32Address,
+			AddressShard:    shardAddress,
+			Identifier:      eventIdentifier,
+			Topics:          event.EventHandler.GetTopics(),
+			Data:            event.EventHandler.GetData(),
+			TxHash:          event.TxHash,
 		})
 	}
 
