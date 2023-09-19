@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 
-	"bytes"
-	"encoding/hex"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus"
 	"github.com/multiversx/mx-chain-core-go/core/check"
 	"github.com/multiversx/mx-chain-core-go/core/pubkeyConverter"
@@ -360,14 +357,12 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 			}
 
 			if identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer" {
-				pubKeyConverter, err := pubkeyConverter.NewHexPubkeyConverter(32)
+				pubKeyConverter, err := pubkeyConverter.NewBech32PubkeyConverter(32, log)
 				if err != nil {
 					return err
 				}
 				reciver := pubKeyConverter.Encode(events.Events[i].Topics[3])
-				receiverShard := getShardOfAddress(reciver)
-
-				if receiverShard != events.Events[i].LogAddressShard {
+				if events.Events[i].LogAddress == reciver {
 					continue
 				}
 			}
@@ -458,35 +453,4 @@ func (rp *rabbitMqPublisher) Close() error {
 // IsInterfaceNil returns true if there is no value under the interface
 func (rp *rabbitMqPublisher) IsInterfaceNil() bool {
 	return rp == nil
-}
-
-const METACHAIN_SHARD_ID = 4294967295
-
-func isAddressOfMetachain(pubKey []byte) bool {
-	metachainPrefix := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	pubKeyPrefix := pubKey[:len(metachainPrefix)]
-	if bytes.Equal(pubKeyPrefix, metachainPrefix) {
-		return true
-	}
-	zeroAddress := make([]byte, 32)
-	return bytes.Equal(pubKey, zeroAddress)
-}
-
-func getShardOfAddress(hexPubKey string) int {
-	numShards := 3
-	maskHigh := 0b11
-	maskLow := 0b01
-
-	pubKey, _ := hex.DecodeString(hexPubKey)
-	lastByteOfPubKey := pubKey[31]
-
-	if isAddressOfMetachain(pubKey) {
-		return METACHAIN_SHARD_ID
-	}
-
-	shard := int(lastByteOfPubKey) & maskHigh
-	if shard > numShards-1 {
-		shard = int(lastByteOfPubKey) & maskLow
-	}
-	return shard
 }

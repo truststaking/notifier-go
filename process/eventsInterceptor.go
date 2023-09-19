@@ -2,13 +2,13 @@ package process
 
 import (
 	"encoding/hex"
+
 	"github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/core/check"
 	nodeData "github.com/multiversx/mx-chain-core-go/data"
 	"github.com/multiversx/mx-chain-core-go/data/smartContractResult"
 	"github.com/multiversx/mx-chain-core-go/data/transaction"
 	"github.com/multiversx/mx-chain-notifier-go/data"
-	"bytes"
 )
 
 // logEvent defines a log event associated with corresponding tx hash
@@ -21,12 +21,10 @@ type logEvent struct {
 // ArgsEventsInterceptor defines the arguments needed for creating an events interceptor instance
 type ArgsEventsInterceptor struct {
 	PubKeyConverter core.PubkeyConverter
-	HexKeyConvertor core.PubkeyConverter
 }
 
 type eventsInterceptor struct {
 	pubKeyConverter core.PubkeyConverter
-	hexKeyConvertor core.PubkeyConverter
 }
 
 // NewEventsInterceptor creates a new eventsInterceptor instance
@@ -120,12 +118,9 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 		if event == nil || check.IfNil(event.EventHandler) {
 			continue
 		}
-		hexAddress := ei.hexKeyConvertor.Encode(event.EventHandler.GetAddress())
-		shardAddress := getShardOfAddress(hexAddress)
+
 		bech32Address := ei.pubKeyConverter.Encode(event.EventHandler.GetAddress())
 		bech32MainLogAddress := ei.pubKeyConverter.Encode(event.Address)
-		hexMainLogAddress := ei.hexKeyConvertor.Encode(event.Address)
-		shardMainLogAddress := getShardOfAddress(hexMainLogAddress)
 		eventIdentifier := string(event.EventHandler.GetIdentifier())
 
 		log.Debug("eventsInterceptor: received event from log address",
@@ -139,9 +134,7 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 
 		events = append(events, data.Event{
 			LogAddress: bech32MainLogAddress,
-			LogAddressShard: shardMainLogAddress,
 			Address:    bech32Address,
-			AddressShard: shardAddress,
 			Identifier: eventIdentifier,
 			Topics:     event.EventHandler.GetTopics(),
 			Data:       event.EventHandler.GetData(),
@@ -166,35 +159,4 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 // IsInterfaceNil returns whether the interface is nil
 func (ei *eventsInterceptor) IsInterfaceNil() bool {
 	return ei == nil
-}
-
-const METACHAIN_SHARD_ID = 4294967295
-
-func isAddressOfMetachain(pubKey []byte) bool {
-	metachainPrefix := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	pubKeyPrefix := pubKey[:len(metachainPrefix)]
-	if bytes.Equal(pubKeyPrefix, metachainPrefix) {
-		return true
-	}
-	zeroAddress := make([]byte, 32)
-	return bytes.Equal(pubKey, zeroAddress)
-}
-
-func getShardOfAddress(hexPubKey string) int {
-	numShards := 3
-	maskHigh := 0b11
-	maskLow := 0b01
-
-	pubKey, _ := hex.DecodeString(hexPubKey)
-	lastByteOfPubKey := pubKey[31]
-
-	if isAddressOfMetachain(pubKey) {
-		return METACHAIN_SHARD_ID
-	}
-
-	shard := int(lastByteOfPubKey) & maskHigh
-	if shard > numShards-1 {
-		shard = int(lastByteOfPubKey) & maskLow
-	}
-	return shard
 }
