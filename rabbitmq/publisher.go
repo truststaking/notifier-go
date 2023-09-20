@@ -417,10 +417,6 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 			} else if err != nil {
 				log.Error("Error adding message to batch", err)
 			}
-			if err != nil {
-				log.Error("Error sending the event to Service Bus", err)
-				return err
-			}
 		}
 		// check if any messages are remaining to be sent.
 		if currentMessageBatch.NumMessages() > 0 {
