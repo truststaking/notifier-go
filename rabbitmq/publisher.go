@@ -371,15 +371,8 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				if receiverShard != events.Events[i].LogAddressShard {
 					continue
 				}
-				num, err := strconv.Atoi(string(events.Events[i].Topics[1]))
-				if err != nil {
-					// handle error
-					log.Error("Error converting nonce to number", err)
-					sessionId = string(events.Events[i].Topics[0])
-				} else {
-					hexStr := strconv.FormatInt(int64(num), 16)
-					sessionId = string(append(events.Events[i].Topics[0], hexStr...))
-				}
+				hexStr := hex.EncodeToString(events.Events[i].Topics[1])
+				sessionId = string(append(events.Events[i].Topics[0], hexStr...))
 
 			}
 
