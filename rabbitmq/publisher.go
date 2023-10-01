@@ -371,7 +371,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 					continue
 				}
 				hexStr := hex.EncodeToString(events.Events[i].Topics[1])
-				sessionId = string(append(events.Events[i].Topics[0], hexStr...))
+				sessionId = string(append(append(events.Events[i].Topics[0], '-'), hexStr...))
 
 			}
 
