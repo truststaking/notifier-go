@@ -352,9 +352,9 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		if err != nil {
 			log.Error("error creating message batch for service bus:", err)
 		}
-
 		for i := 0; i < len(events.Events); i++ {
 			identifier := events.Events[i].Identifier
+			sessionId := events.Events[i].Address
 			if identifier == "completedTxEvent" || identifier == "signalError" || identifier == "internalVMErrors" || identifier == "writeLog" {
 				continue
 			}
@@ -370,6 +370,8 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				if receiverShard != events.Events[i].LogAddressShard {
 					continue
 				}
+				combined := append(events.Events[i].Topics[0], events.Events[i].Topics[1]...)
+				sessionId = string(combined)
 			}
 
 			event, err := json.Marshal(events.Events[i])
@@ -379,7 +381,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 
 			msg := &azservicebus.Message{
 				Body:                  event,
-				SessionID:             &events.Hash,
+				SessionID:             &sessionId,
 				ApplicationProperties: make(map[string]interface{})}
 			msg.ApplicationProperties["Address"] = events.Events[i].Address
 
