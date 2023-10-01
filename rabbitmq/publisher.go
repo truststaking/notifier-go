@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strconv"
 
 	"bytes"
 	"encoding/hex"
@@ -370,8 +371,16 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				if receiverShard != events.Events[i].LogAddressShard {
 					continue
 				}
-				combined := append(events.Events[i].Topics[0], events.Events[i].Topics[1]...)
-				sessionId = string(combined)
+				num, err := strconv.Atoi(string(events.Events[i].Topics[1]))
+				if err != nil {
+					// handle error
+					log.Error("Error converting nonce to number", err)
+					sessionId = string(events.Events[i].Topics[0])
+				} else {
+					hexStr := strconv.FormatInt(int64(num), 16)
+					sessionId = string(append(events.Events[i].Topics[0], hexStr...))
+				}
+
 			}
 
 			event, err := json.Marshal(events.Events[i])
@@ -417,7 +426,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				// was full so it didn't go out with the previous SendMessageBatch call).
 				i--
 			} else if err != nil {
-				log.Error("Error adding message to batch", err)
+				log.Error("Error adding message to batch", currentMessageBatch.NumMessages(), err)
 			}
 		}
 		// check if any messages are remaining to be sent.
