@@ -370,9 +370,10 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				if receiverShard != events.Events[i].LogAddressShard {
 					continue
 				}
+			}
+			if identifier == "ESDTNFTCreate" || identifier == "ESDTNFTBurn" || identifier == "ESDTNFTUpdateAttributes" || identifier == "ESDTNFTAddURI" || identifier == "ESDTNFTAddQuantity" || identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer" {
 				hexStr := hex.EncodeToString(events.Events[i].Topics[1])
 				sessionId = string(append(append(events.Events[i].Topics[0], '-'), hexStr...))
-
 			}
 
 			event, err := json.Marshal(events.Events[i])
