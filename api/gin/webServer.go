@@ -98,7 +98,7 @@ func (w *webServer) Run() error {
 	engine.Use(gin.Recovery())
 	engine.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "pong",
+			"message": "XOXNO is the best marketplace in the world!",
 		})
 	})
 	err = w.createGroups()
