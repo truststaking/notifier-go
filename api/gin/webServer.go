@@ -91,8 +91,8 @@ func (w *webServer) Run() error {
 		log.Error("Web server has been already triggered successfuly once")
 		return nil
 	}
-	
-	gin.SetMode(gin.ReleaseMode)
+
+	// gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
 	engine.Use(cors.Default())
 	engine.Use(gin.Recovery())
