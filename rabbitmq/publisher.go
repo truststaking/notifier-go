@@ -376,10 +376,9 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 			if identifier == "ESDTNFTCreate" || identifier == "ESDTNFTBurn" || identifier == "ESDTNFTUpdateAttributes" || identifier == "ESDTNFTAddURI" || identifier == "ESDTNFTAddQuantity" || identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer" {
 				hexStr := hex.EncodeToString(events.Events[i].Topics[1])
 				if hexStr == ""  {
-					hexStr = "0"
 					isNFT = false
 				}
-				sessionId = string(append(append(events.Events[i].Topics[0], '-'), hexStr...))
+				sessionId = string(events.Events[i].Topics[0])
 			}
 
 			event, err := json.Marshal(events.Events[i])
