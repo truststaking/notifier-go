@@ -355,6 +355,7 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 		for i := 0; i < len(events.Events); i++ {
 			identifier := events.Events[i].Identifier
 			sessionId := events.Events[i].Address
+			isNFT := true
 			if identifier == "completedTxEvent" || identifier == "signalError" || identifier == "internalVMErrors" || identifier == "writeLog" {
 				continue
 			}
@@ -371,8 +372,13 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 					continue
 				}
 			}
+
 			if identifier == "ESDTNFTCreate" || identifier == "ESDTNFTBurn" || identifier == "ESDTNFTUpdateAttributes" || identifier == "ESDTNFTAddURI" || identifier == "ESDTNFTAddQuantity" || identifier == "MultiESDTNFTTransfer" || identifier == "ESDTNFTTransfer" || identifier == "ESDTTransfer" {
 				hexStr := hex.EncodeToString(events.Events[i].Topics[1])
+				if hexStr == ""  {
+					hexStr = "0"
+					isNFT = false
+				}
 				sessionId = string(append(append(events.Events[i].Topics[0], '-'), hexStr...))
 			}
 
@@ -386,6 +392,10 @@ func (rp *rabbitMqPublisher) publishFanout(exchangeName string, payload []byte) 
 				SessionID:             &sessionId,
 				ApplicationProperties: make(map[string]interface{})}
 			msg.ApplicationProperties["Address"] = events.Events[i].Address
+
+			if identifier == "MultiESDTNFTTransfer" {
+				msg.ApplicationProperties["isNFT"] = isNFT
+			}
 
 			msg.ApplicationProperties["Identifier"] = events.Events[i].Identifier
 			err = currentMessageBatch.AddMessage(msg, nil)
