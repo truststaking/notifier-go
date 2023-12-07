@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Nov  3 14:28:35 2023
+# Make data base, printed on Thu Dec  7 21:19:39 2023
 
 # Variables
 
@@ -23,7 +23,7 @@ VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
 # makefile (from `Makefile', line 113)
 test_data_file = ./examples/requests.json
 # environment
-NVM_INC = /Users/truststaking/.nvm/versions/node/v18.15.0/include/node
+NVM_INC = /Users/truststaking/.nvm/versions/node/v18.17.0/include/node
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -53,19 +53,21 @@ VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /usr/local/opt/ruby/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/.cargo/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.nvm/versions/node/v18.15.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/truststaking/.pub-cache/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin
+PATH = /Users/truststaking/Library/pnpm:/usr/local/opt/ruby/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/.cargo/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.volta/bin:/Users/truststaking/multiversx-sdk:/Users/truststaking/.nvm/versions/node/v18.17.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/Users/truststaking/multiversx-sdk/vendor-rust/bin:/Users/truststaking/.pub-cache/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin:/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin
 # makefile (from `Makefile', line 36)
 api_type = "rabbit-api"
 # environment
+PNPM_HOME = /Users/truststaking/Library/pnpm
+# environment
 GOPATH = /Users/truststaking/go
 # environment
-NVM_BIN = /Users/truststaking/.nvm/versions/node/v18.15.0/bin
+NVM_BIN = /Users/truststaking/.nvm/versions/node/v18.17.0/bin
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.VfgQ2ddAz5/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.n8QZJPvASP/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -75,7 +77,7 @@ HOMEBREW_CELLAR = /opt/homebrew/Cellar
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
-MANPATH = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man:/Users/truststaking/.nvm/versions/node/v18.15.0/share/man:/opt/homebrew/share/man::
+MANPATH = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man:/Users/truststaking/.nvm/versions/node/v18.17.0/share/man:/opt/homebrew/share/man::
 # environment
 GOMODCACHE = /Users/truststaking/go/pkg/mod
 # environment
@@ -85,7 +87,7 @@ MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # makefile (from `Makefile', line 57)
 image_tag = "latest"
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/f1b07bd25dfad64b0167beb15359ae573aecd2cc
+VSCODE_CODE_CACHE_PATH = /Users/truststaking/Library/Application Support/Code/CachedData/1a5daa3a0231a0fbba4f14db7ec463cf99d7768e
 # environment
 LOGNAME = truststaking
 # environment
@@ -127,7 +129,7 @@ TMPDIR = /var/folders/x5/v4xcxnpx3z78h776pbsp8v7m0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.83-main.sock
+VSCODE_IPC_HOOK = /Users/truststaking/Library/Application Support/Code/1.84-main.sock
 # environment
 MallocNanoZone = 0
 # makefile (from `Makefile', line 23)
@@ -143,7 +145,7 @@ MFLAGS = -Rrqp
 # environment
 NVM_DIR = /Users/truststaking/.nvm
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.147160785.147160792
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.153899239.153899245
 # environment
 HOMEBREW_PREFIX = /opt/homebrew
 # automatic
@@ -175,13 +177,13 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 92402
+VSCODE_PID = 4190
 # environment
 NPM_TOKEN = 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
 # makefile (from `Makefile', line 58)
 container_name = notifier
 # variable set hash-table stats:
-# Load=83/1024=8%, Rehash=0, Collisions=2/111=2%
+# Load=84/1024=8%, Rehash=0, Collisions=2/112=2%
 
 # Pattern-specific Variable Values
 
@@ -189,7 +191,7 @@ container_name = notifier
 
 # Directories
 
-# . (device 16777232, inode 40832603): 30 files, no impossibilities.
+# . (device 16777230, inode 40832603): 30 files, no impossibilities.
 
 # 30 files, no impossibilities in 1 directories.
 
@@ -273,13 +275,13 @@ debug: build
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 49):
 	cd ${cmd_dir} && \
+ 
 	${debugger} exec ./${binary} -- --api-type=${api_type}
 	
 
 test:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 12):
 	@echo "  >  Running unit tests"
@@ -431,6 +433,6 @@ docker-stop:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Nov  3 14:28:35 2023
+# Finished Make data base on Thu Dec  7 21:19:39 2023
 
  

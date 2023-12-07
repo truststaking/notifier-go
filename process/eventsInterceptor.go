@@ -59,8 +59,20 @@ func (ei *eventsInterceptor) ProcessBlockEvents(eventsData *data.ArgsSaveBlockDa
 	if eventsData.Header == nil {
 		return nil, ErrNilBlockHeader
 	}
+	scrs := make(map[string]*smartContractResult.SmartContractResult)
+	scrHashes := make(map[string]string)
+	scrsWithOrder := make(map[string]*data.NotifierSmartContractResult)
+	for hash, scr := range eventsData.TransactionsPool.Scrs {
+		scrs[hash] = scr.TransactionHandler
+		scrHashes[hash] = hash
+		scrsWithOrder[hash] = &data.NotifierSmartContractResult{
+			SmartContractResult: scr.TransactionHandler,
+			FeeInfo:             scr.FeeInfo,
+			ExecutionOrder:      scr.ExecutionOrder,
+		}
+	}
 
-	events := ei.getLogEventsFromTransactionsPool(eventsData.TransactionsPool.Logs)
+	events := ei.getLogEventsFromTransactionsPool(eventsData.TransactionsPool.Logs, scrHashes)
 
 	txs := make(map[string]*transaction.Transaction)
 	txsWithOrder := make(map[string]*data.NotifierTransaction)
@@ -70,17 +82,6 @@ func (ei *eventsInterceptor) ProcessBlockEvents(eventsData *data.ArgsSaveBlockDa
 			Transaction:    tx.TransactionHandler,
 			FeeInfo:        tx.FeeInfo,
 			ExecutionOrder: tx.ExecutionOrder,
-		}
-	}
-
-	scrs := make(map[string]*smartContractResult.SmartContractResult)
-	scrsWithOrder := make(map[string]*data.NotifierSmartContractResult)
-	for hash, scr := range eventsData.TransactionsPool.Scrs {
-		scrs[hash] = scr.TransactionHandler
-		scrsWithOrder[hash] = &data.NotifierSmartContractResult{
-			SmartContractResult: scr.TransactionHandler,
-			FeeInfo:             scr.FeeInfo,
-			ExecutionOrder:      scr.ExecutionOrder,
 		}
 	}
 
@@ -96,7 +97,7 @@ func (ei *eventsInterceptor) ProcessBlockEvents(eventsData *data.ArgsSaveBlockDa
 	}, nil
 }
 
-func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogData) []data.Event {
+func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogData, scrs map[string]string) []data.Event {
 	var logEvents []*logEvent
 	for _, logData := range logs {
 		if logData == nil {
@@ -110,7 +111,16 @@ func (ei *eventsInterceptor) getLogEventsFromTransactionsPool(logs []*data.LogDa
 		for _, eventHandler := range logData.LogHandler.GetLogEvents() {
 			eventIdentifier := string(eventHandler.GetIdentifier())
 			if eventIdentifier == "signalError" || eventIdentifier == "internalVMErrors" {
-				skipTransfers = true
+				_, exists := scrs[logData.TxHash]
+				
+				if !exists {
+					skipTransfers = true
+				}
+				log.Debug("eventsInterceptor: received signalError or internalVMErrors event from log event",
+					"txHash", logData.TxHash,
+					"isSCResult", exists,
+					"skipTransfers", skipTransfers,
+				)
 			}
 			le := &logEvent{
 				EventHandler: eventHandler,

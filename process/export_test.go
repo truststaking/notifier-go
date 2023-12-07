@@ -9,5 +9,6 @@ func (eh *eventsHandler) TryCheckProcessedWithRetry(prefix, blockHash string) bo
 
 // GetLogEventsFromTransactionsPool exports internal method for testing
 func (ei *eventsInterceptor) GetLogEventsFromTransactionsPool(logs []*data.LogData) []data.Event {
-	return ei.getLogEventsFromTransactionsPool(logs)
+	scrHashes := make(map[string]string)
+	return ei.getLogEventsFromTransactionsPool(logs, scrHashes)
 }
