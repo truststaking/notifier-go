@@ -92,7 +92,7 @@ func (w *webServer) Run() error {
 		return nil
 	}
 
-	// gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 	engine := gin.New()
 	engine.Use(cors.Default())
 	engine.Use(gin.Recovery())
